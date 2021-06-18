@@ -2,6 +2,7 @@ package Main;
 
 import Data.Paths;
 
+import Utils.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,8 @@ public class SchedulingApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Database.dbConnect();
+        Database.dbDisconnect();
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Paths.mainLoginPath)));
         Scene scene = new Scene(root);
