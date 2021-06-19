@@ -15,27 +15,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/" fx:controller="Controllers.MainLoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MainLoginController">
     <children>
-        <VBox prefHeight="400.0" prefWidth="600.0">
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
-                <ButtonBar id="navigation-menu" prefHeight="60.0">
-                    <buttons>
-                        <Button fx:id="navbarLogInButton" mnemonicParsing="false" text="Log In">
-                            <styleClass>
-                                <String fx:value="navigation-item" />
-                                <String fx:value="navigation-item-selected" />
-                            </styleClass>
-                        </Button>
-                    </buttons>
-                </ButtonBar>
+                <ButtonBar id="navigation-menu" prefHeight="60.0" />
                 <StackPane id="small-content-container" prefHeight="340.0">
                     <children>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
                             <children>
                                 <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
                                     <children>
-                                        <Label fx:id="titleLabel" text="Log In">
+                                        <Label fx:id="titleLabel" text="Scheduling App Login">
                                             <font>
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
@@ -54,17 +45,20 @@
                                         <RowConstraints maxHeight="15.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label fx:id="usernameLabel" text="Username" />
-                                        <Label fx:id="passwordLabel" text="Password" GridPane.rowIndex="2" />
-                                        <TextField fx:id="usernameTextField" GridPane.columnIndex="1" />
-                                        <Label fx:id="usernameErrorLabel" text="The username does not exist" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <Label fx:id="passwordErrorLabel" text="The password is incorrect" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                        <PasswordField fx:id="passwordPassField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label fx:id="usernameLabel" text="Username:" />
+                                        <Label fx:id="passwordLabel" text="Password:" GridPane.rowIndex="2" />
+                                        <TextField fx:id="usernameInput" GridPane.columnIndex="1" />
+                                        <PasswordField fx:id="passwordInput" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     </children>
                                 </GridPane>
                                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
                                     <children>
-                                        <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" prefWidth="75.0" text="Submit" />
+                                    <Button fx:id="loginButton" mnemonicParsing="false" text="Log In">
+                                        <styleClass>
+                                            <String fx:value="navigation-item" />
+                                            <String fx:value="navigation-item-selected" />
+                                        </styleClass>
+                                    </Button>
                                     </children>
                                 </HBox>
                             </children>
