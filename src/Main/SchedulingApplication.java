@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -28,13 +30,16 @@ public class SchedulingApplication extends Application {
     }
 
     public static void main(String[] args) {
+        Database.dbConnect();
+
+        System.out.println("Time Zone: " + ZoneId.systemDefault());
+        System.out.println("Language: " + Locale.getDefault());
+
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Database.dbConnect();
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Paths.mainLoginPath)));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

@@ -53,7 +53,7 @@
                                 </GridPane>
                                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
                                     <children>
-                                    <Button fx:id="loginButton" mnemonicParsing="false" text="Log In">
+                                    <Button fx:id="loginButton" mnemonicParsing="false" text="Login">
                                         <styleClass>
                                             <String fx:value="navigation-item" />
                                             <String fx:value="navigation-item-selected" />
