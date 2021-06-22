@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -47,12 +48,14 @@
                                     <children>
                                         <Label fx:id="usernameLabel" text="Username:" />
                                         <Label fx:id="passwordLabel" text="Password:" GridPane.rowIndex="2" />
-                                        <TextField fx:id="usernameInput" GridPane.columnIndex="1" />
-                                        <PasswordField fx:id="passwordInput" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <TextField fx:id="usernameTextField" GridPane.columnIndex="1" />
+                                        <PasswordField fx:id="passwordInputField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     </children>
                                 </GridPane>
                                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
                                     <children>
+                              <Label fx:id="timezoneLabel" text="Timezone: " />
+                              <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="loginButton" mnemonicParsing="false" text="Login">
                                         <styleClass>
                                             <String fx:value="navigation-item" />
