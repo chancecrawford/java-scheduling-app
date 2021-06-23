@@ -1,11 +1,11 @@
 package Main;
 
+import Controllers.MainLoginController;
 import Data.Paths;
 
 import Utils.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,6 +27,7 @@ public class SchedulingApplication extends Application {
         Scene newScene = new Scene(newView);
         Stage stage = getCurrentStage();
         stage.setScene(newScene);
+        stage.show();
     }
 
     public static void main(String[] args) {
@@ -42,6 +43,7 @@ public class SchedulingApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Paths.mainLoginPath)));
         Scene scene = new Scene(root);
+        currentStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
     }

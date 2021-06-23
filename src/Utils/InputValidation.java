@@ -12,6 +12,9 @@ public class InputValidation {
         if (username == null || username.isEmpty()) {
             loginInputErrors.append(resBundle.getString("noUsernameEnteredError")).append("\n");
         }
+        if (password == null || password.isEmpty()) {
+            loginInputErrors.append(resBundle.getString("noPasswordEnteredError")).append("\n");
+        }
 
         // generates alert and populates it with error messages if inputErrors string builder isn't empty
         if (loginInputErrors.length() > 0 || !loginInputErrors.toString().equals("")) {

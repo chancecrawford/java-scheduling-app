@@ -1,9 +1,19 @@
 package Controllers;
 
+import Data.Paths;
+import Main.SchedulingApplication;
+import Models.User;
+
+import Utils.Alerts;
+import Utils.Database;
 import Utils.InputValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -18,6 +28,8 @@ public class MainLoginController {
     @FXML private Label timezoneLabel;
 
     private static final ResourceBundle resBundle = ResourceBundle.getBundle("Locale/Login", Locale.forLanguageTag(Locale.getDefault().getCountry()));
+
+    private User user = new User();
 
     @FXML
     private void initialize() {
@@ -35,11 +47,45 @@ public class MainLoginController {
             String username = usernameTextField.getText().trim();
             String password = passwordInputField.getText();
 
-            InputValidation.checkLoginInputs(username, password);
+            if (InputValidation.checkLoginInputs(username, password)) {
+                if (authenticateUser(username, password)) {
+                    try {
+                        SchedulingApplication.switchScenes(Paths.appointmentsMonthlyPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
     }
 
-    private void authenticateUser(String usernameInput, String passwordInput) {
+    private boolean authenticateUser(String usernameInput, String passwordInput) {
+        try {
+            PreparedStatement getUser = Database.getDBConnection().prepareStatement("SELECT * FROM users WHERE User_Name=?");
+            getUser.setString(1, usernameInput);
+            ResultSet userResult = getUser.executeQuery();
 
+            if (!userResult.next()) {
+                Alerts.GenerateAlert("WARNING", "Login Error", "User Not Found", resBundle.getString("cannotFindUsernameError"), "ShowAndWait");
+                return false;
+            }
+            if (!passwordInput.equals(userResult.getString("Password"))) {
+                Alerts.GenerateAlert("WARNING", "Login Error", "Password Error", resBundle.getString("passwordIncorrectError"), "ShowAndWait");
+                return false;
+            }
+            System.out.println(userResult.getInt("User_ID"));
+
+            user.setId(userResult.getInt("User_ID"));
+            user.setUsername(userResult.getString("User_Name"));
+            user.setPassword(userResult.getString("Password"));
+
+            return true;
+        } catch (SQLException error) {
+            // alert doesn't show when a db connection can't be made?
+            Alerts.GenerateAlert("ERROR", "Database Error", "Database Connection Issue", resBundle.getString("databaseConnectionError"), "ShowAndWait");
+            error.printStackTrace();
+        }
+
+        return false;
     }
 }
