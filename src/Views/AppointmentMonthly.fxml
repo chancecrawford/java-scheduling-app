@@ -108,12 +108,12 @@
                             </center>
                             <left>
                                 <Button mnemonicParsing="false"
-                                        styleClass="clickable" text="&lt;-"
+                                        styleClass="clickable" text="&lt;"
                                         BorderPane.alignment="CENTER"/>
                             </left>
                             <right>
                                 <Button mnemonicParsing="false"
-                                        styleClass="clickable" text="-&gt;"
+                                        styleClass="clickable" text="&gt;"
                                         BorderPane.alignment="CENTER"/>
                             </right>
                         </BorderPane>

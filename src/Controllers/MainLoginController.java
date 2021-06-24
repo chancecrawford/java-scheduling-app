@@ -29,7 +29,7 @@ public class MainLoginController {
 
     private static final ResourceBundle resBundle = ResourceBundle.getBundle("Locale/Login", Locale.forLanguageTag(Locale.getDefault().getCountry()));
 
-    private User user = new User();
+    private User user;
 
     @FXML
     private void initialize() {
@@ -73,12 +73,12 @@ public class MainLoginController {
                 Alerts.GenerateAlert("WARNING", "Login Error", "Password Error", resBundle.getString("passwordIncorrectError"), "ShowAndWait");
                 return false;
             }
-            System.out.println(userResult.getInt("User_ID"));
 
-            user.setId(userResult.getInt("User_ID"));
-            user.setUsername(userResult.getString("User_Name"));
-            user.setPassword(userResult.getString("Password"));
-
+            user = new User(
+                    userResult.getInt("User_ID"),
+                    userResult.getString("User_Name"),
+                    userResult.getString("Password")
+            );
             return true;
         } catch (SQLException error) {
             // alert doesn't show when a db connection can't be made?
