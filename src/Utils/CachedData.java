@@ -9,7 +9,10 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class CachedData {
     private final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -47,7 +50,10 @@ public class CachedData {
             PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
             ResultSet appointmentResult = appointmentsStatement.executeQuery();
             while (appointmentResult.next()) {
-                // TODO: need to create variable to grab start/end dates and convert them from UTC to local time
+                // retrieve and convert start/end timestamps to local time
+                LocalDateTime startLocalTime = appointmentResult.getTimestamp("Start").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                LocalDateTime endLocalTime = appointmentResult.getTimestamp("End").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
                 Appointment appt = new Appointment(
                     appointmentResult.getInt("Appointment_ID"),
                     appointmentResult.getInt("User_ID"),
@@ -57,13 +63,14 @@ public class CachedData {
                     appointmentResult.getString("Description"),
                     appointmentResult.getString("Location"),
                     appointmentResult.getString("Type"),
-                    start,
-                    end
+                    startLocalTime,
+                    endLocalTime
                 );
                 addAppointment(appt);
             }
         } catch (SQLException dbError) {
             dbError.printStackTrace();
         }
+        // need to add anything after this? like checks on the list?
     }
 }

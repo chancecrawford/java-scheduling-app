@@ -1,17 +1,35 @@
 package Controllers;
 
 import Models.Appointment;
+import Utils.CachedData;
+import Utils.DateFormatter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+
 public class AppointmentsMonthlyController {
-    @FXML private Label calendarTitleLabel;
+    // view navigation
+    @FXML private Button apptsNavButton; // don't think we need this button?
+    @FXML private Button customerNavButton;
+    @FXML private Button reportsNavButton;
+    @FXML private Button logoutButton;
+
+    @FXML private Label apptsLabel;
+
+    @FXML private ToggleGroup apptsToggleGroup;
+    @FXML private ToggleButton apptsMonthlyToggle;
+    @FXML private ToggleButton apptsWeeklyToggle;
+    // calendar elements
+    @FXML private Label calendarCurrentDate;
+    @FXML private Button calendarPreviousButton;
+    @FXML private Button calendarNextButton;
     @FXML private Pane calendarCell_1, calendarCell_2, calendarCell_3, calendarCell_4, calendarCell_5, calendarCell_6,
             calendarCell_7, calendarCell_8, calendarCell_9, calendarCell_10, calendarCell_11, calendarCell_12,
             calendarCell_13, calendarCell_14, calendarCell_15, calendarCell_16, calendarCell_17, calendarCell_18,
@@ -28,14 +46,64 @@ public class AppointmentsMonthlyController {
             calendarCellNum_31, calendarCellNum_32, calendarCellNum_33, calendarCellNum_34, calendarCellNum_35,
             calendarCellNum_36, calendarCellNum_37, calendarCellNum_38, calendarCellNum_39, calendarCellNum_40,
             calendarCellNum_41, calendarCellNum_42;
-    @FXML private Button deleteButton;
-    @FXML private Button editButton;
-
+    // tableview and list for appointments
     @FXML private TableView<Appointment> appointmentTableView;
     @FXML private TableColumn<Appointment, String> appointmentTableColumn;
+    // appointment manipulations
+    @FXML private Button addButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
+
+    private final ObservableList<Appointment> appointmentTableItems = FXCollections.observableArrayList();
+    private final LinkedHashMap<Pane, Text> calendarHashMap = new LinkedHashMap<>();
+
+    private CachedData cachedData = new CachedData();
+
+    private Calendar calendar = Calendar.getInstance();
 
     @FXML
     private void initialize() {
+        calendarCurrentDate.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
 
+        setNavigationButtonEvents();
+    }
+
+    private void setNavigationButtonEvents() {
+        customerNavButton.setOnAction(actionEvent -> {
+
+        });
+        reportsNavButton.setOnAction(actionEvent -> {
+
+        });
+        logoutButton.setOnAction(actionEvent -> {
+
+        });
+    }
+
+    private void weeklyToggleEvent() {
+        apptsWeeklyToggle.setOnAction(actionEvent -> {
+
+        });
+    }
+
+    private void calendarNavigateButtonEvents() {
+        calendarPreviousButton.setOnAction(actionEvent -> {
+
+        });
+        calendarNextButton.setOnAction(actionEvent -> {
+
+        });
+    }
+
+    private void appointmentEditingButtonEvents() {
+        addButton.setOnAction(actionEvent -> {
+
+        });
+        editButton.setOnAction(actionEvent -> {
+
+        });
+        deleteButton.setOnAction(actionEvent -> {
+
+        });
     }
 }
