@@ -6,10 +6,10 @@ public class Paths {
     public static final String addCustomerPath = "../Views/";
     public static final String appointmentsMonthlyPath = "../Views/AppointmentMonthly.fxml";
     public static final String appointmentsWeeklyPath = "../Views/";
-    public static final String customersPath = "../Views/";
+    public static final String customersPath = "../Views/Customers.fxml";
     public static final String editAppointmentsPath = "../Views/";
     public static final String editCustomersPath = "../Views/";
-    public static final String reportCustomerAppointmentsPath = "../Views/";
-    public static final String reportContactSchedulePath = "../Views/";
-    public static final String customReportPath = "../Views/";
+    public static final String reportAppointmentTypeMonthPath = "../Views/ReportAppointmentTypeMonth.fxml";
+    public static final String reportContactSchedulePath = "../Views/ReportContactSchedule.fxml";
+    public static final String customReportPath = "../Views/ReportTBD.fxml";
 }

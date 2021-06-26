@@ -150,130 +150,130 @@
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sat" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_1" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_1" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_1" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_2" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_2" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_2" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_3" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_3" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_3" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_4" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_4" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_4" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_5" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_5" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_5" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_6" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_6" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_6" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_7" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="1">
-                                <Text fx:id="calendarCellNum_7" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_7" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_8" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_8" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_8" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_9" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_9" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_9" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_10" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_10" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_10" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_11" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_11" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_11" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_12" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_12" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_12" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_13" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_13" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_13" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_14" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="2">
-                                <Text fx:id="calendarCellNum_14" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_14" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_15" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_15" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_15" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_16" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_16" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_16" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_17" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_17" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_17" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_18" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_18" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_18" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_19" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_19" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_19" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_20" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_20" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_20" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_21" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="3">
-                                <Text fx:id="calendarCellNum_21" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_21" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_22" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_22" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_22" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_23" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_23" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_23" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_24" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_24" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_24" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_25" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_25" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_25" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_26" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_26" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_26" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_27" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_27" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_27" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_28" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="4">
-                                <Text fx:id="calendarCellNum_28" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_28" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_29" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_29" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_29" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_30" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_30" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_30" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_31" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_31" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_31" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_32" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_32" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_32" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_33" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_33" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_33" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_34" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_34" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_34" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_35" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="5">
-                                <Text fx:id="calendarCellNum_35" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_35" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_36" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_36" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_36" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_37" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_37" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_37" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_38" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="2" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_38" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_38" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_39" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="3" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_39" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_39" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_40" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="4" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_40" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_40" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_41" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="5" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_41" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_41" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                             <StackPane fx:id="calendarCell_42" prefHeight="150.0" prefWidth="200.0" styleClass="clickable" GridPane.columnIndex="6" GridPane.rowIndex="6">
-                                <Text fx:id="calendarCellNum_42" strokeType="OUTSIDE" strokeWidth="0.0" text="#" />
+                                <Text fx:id="calendarCellNum_42" strokeType="OUTSIDE" strokeWidth="0.0" />
                             </StackPane>
                         </GridPane>
                     </VBox>
