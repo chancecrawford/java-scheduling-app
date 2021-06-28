@@ -1,8 +1,10 @@
 package Utils;
 
+import Main.SchedulingApplication;
 import Models.Appointment;
 import Models.Customer;
 
+import Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,8 +17,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 public class CachedData {
-    private final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    private final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private static final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     public void addCustomer(Customer newCustomer) { allCustomers.add(newCustomer); }
     public void addAppointment(Appointment newAppointment) { allAppointments.add(newAppointment); }
@@ -73,4 +75,33 @@ public class CachedData {
         }
         // need to add anything after this? like checks on the list?
     }
+
+    public ObservableList<Appointment> getAppointmentsByDate(String date) {
+        // temp list to hold date matches
+        ObservableList<Appointment> datesMatched = FXCollections.observableArrayList();
+        for (Appointment appointment:getAllAppointments()
+             ) {
+            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
+                && DateFormatter.formatToIsoDate(appointment.getStart()).equals(date)) {
+                datesMatched.add(appointment);
+            }
+        }
+        return datesMatched;
+    }
+
+//    public User getUserByUsername(String username) {
+//        User user = null;
+//        try {
+//            PreparedStatement userStatement = Database.getDBConnection().prepareStatement("SELECT * FROM users WHERE User_Name =?");
+//            ResultSet userResult = userStatement.executeQuery();
+//            user = new User(
+//                    userResult.getInt("User_ID"),
+//                    userResult.getString("User_Name"),
+//                    userResult.getString("Password")
+//            );
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        return user;
+//    }
 }

@@ -23,6 +23,9 @@ public class DateFormatter {
             if (formatType.equals("isoYearMonth")) {
                 return new SimpleDateFormat("yyyy-MM").format(date);
             }
+            if (formatType.equals("dbFormat")) {
+                return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(date);
+            }
         }
         return null;
     }

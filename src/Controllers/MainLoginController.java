@@ -74,11 +74,11 @@ public class MainLoginController {
                 return false;
             }
 
-            user = new User(
+            SchedulingApplication.setUser(new User(
                     userResult.getInt("User_ID"),
                     userResult.getString("User_Name"),
                     userResult.getString("Password")
-            );
+            ));
             return true;
         } catch (SQLException error) {
             // alert doesn't show when a db connection can't be made?

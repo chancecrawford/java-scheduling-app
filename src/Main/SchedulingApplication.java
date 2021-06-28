@@ -1,8 +1,8 @@
 package Main;
 
-import Controllers.MainLoginController;
 import Data.Paths;
 
+import Models.User;
 import Utils.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +21,8 @@ import java.util.Objects;
 public class SchedulingApplication extends Application {
 
     public static Stage currentStage;
+
+    private static User user;
 
     public static void switchScenes(String scenePath) throws IOException {
         Parent newView = FXMLLoader.load(Objects.requireNonNull(SchedulingApplication.class.getResource(scenePath)));
@@ -49,4 +51,6 @@ public class SchedulingApplication extends Application {
     }
 
     public static Stage getCurrentStage() { return currentStage; }
+    public static User getUser() { return user; }
+    public static void setUser(User user) { SchedulingApplication.user = user; }
 }
