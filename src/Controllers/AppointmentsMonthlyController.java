@@ -22,20 +22,12 @@ import java.util.Set;
 
 public class AppointmentsMonthlyController {
     // view navigation
-    @FXML private Button apptsNavButton;
-    @FXML private Button customerNavButton;
-    @FXML private Button reportsNavButton;
-    @FXML private Button logoutButton;
-
-    @FXML private Label apptsLabel;
-
-    @FXML private ToggleGroup apptsToggleGroup;
-    @FXML private ToggleButton apptsMonthlyToggle;
+    @FXML private Button customerNavButton, reportsNavButton, logoutButton;
+    // toggle to weekly view
     @FXML private ToggleButton apptsWeeklyToggle;
     // calendar elements
-    @FXML private Label calendarCurrentDate;
-    @FXML private Button calendarPreviousButton;
-    @FXML private Button calendarNextButton;
+    @FXML private Label calendarMonthYearLabel;
+    @FXML private Button calendarPreviousButton, calendarNextButton;
     // cells for calendar
     @FXML private Pane
             calendarCell_1, calendarCell_2, calendarCell_3, calendarCell_4, calendarCell_5, calendarCell_6,
@@ -104,12 +96,11 @@ public class AppointmentsMonthlyController {
     @FXML private TableView<Appointment> appointmentTableView;
     @FXML private TableColumn<Appointment, String> appointmentTableColumn;
     // appointment manipulations
-    @FXML private Button addButton;
-    @FXML private Button editButton;
-    @FXML private Button deleteButton;
+    @FXML private Button addButton, editButton, deleteButton;
 
     private final ObservableList<Appointment> appointmentTableItems = FXCollections.observableArrayList();
-    private final LinkedHashMap<Pane, Text> calendarHashMap = new LinkedHashMap<>();
+    // used to link elements in cells for days in each month
+    private final LinkedHashMap<Pane, Text> calendarMonthHashMap = new LinkedHashMap<>();
 
     // for keeping track of selections
     private Pane selectedDay = null;
@@ -136,56 +127,63 @@ public class AppointmentsMonthlyController {
         setCalendarNavigateButtonEvents();
         setAppointmentEditingButtonEvents();
         // set listener to update appt table with appts for selected day
-        setAppointmentTableListener();
+        setAppointmentMonthlyTableListener();
         cachedData.importAppointments();
+
+//        for (Appointment appt: cachedData.getAllAppointments()) {
+//            System.out.println(appt.getApptID());
+//            System.out.println(appt.getTitle());
+//            System.out.println(appt.getType());
+//            System.out.println(appt.getDescription());
+//        }
     }
 
     private void populateCalendar() {
-        calendarCurrentDate.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
+        calendarMonthYearLabel.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
         // this is so janky but don't know a better way for linking these in grid pane?
-        calendarHashMap.put(calendarCell_1, calendarCellNum_1);
-        calendarHashMap.put(calendarCell_2, calendarCellNum_2);
-        calendarHashMap.put(calendarCell_3, calendarCellNum_3);
-        calendarHashMap.put(calendarCell_4, calendarCellNum_4);
-        calendarHashMap.put(calendarCell_5, calendarCellNum_5);
-        calendarHashMap.put(calendarCell_6, calendarCellNum_6);
-        calendarHashMap.put(calendarCell_7, calendarCellNum_7);
-        calendarHashMap.put(calendarCell_8, calendarCellNum_8);
-        calendarHashMap.put(calendarCell_9, calendarCellNum_9);
-        calendarHashMap.put(calendarCell_10, calendarCellNum_10);
-        calendarHashMap.put(calendarCell_11, calendarCellNum_11);
-        calendarHashMap.put(calendarCell_12, calendarCellNum_12);
-        calendarHashMap.put(calendarCell_13, calendarCellNum_13);
-        calendarHashMap.put(calendarCell_14, calendarCellNum_14);
-        calendarHashMap.put(calendarCell_15, calendarCellNum_15);
-        calendarHashMap.put(calendarCell_16, calendarCellNum_16);
-        calendarHashMap.put(calendarCell_17, calendarCellNum_17);
-        calendarHashMap.put(calendarCell_18, calendarCellNum_18);
-        calendarHashMap.put(calendarCell_19, calendarCellNum_19);
-        calendarHashMap.put(calendarCell_20, calendarCellNum_20);
-        calendarHashMap.put(calendarCell_21, calendarCellNum_21);
-        calendarHashMap.put(calendarCell_22, calendarCellNum_22);
-        calendarHashMap.put(calendarCell_23, calendarCellNum_23);
-        calendarHashMap.put(calendarCell_24, calendarCellNum_24);
-        calendarHashMap.put(calendarCell_25, calendarCellNum_25);
-        calendarHashMap.put(calendarCell_26, calendarCellNum_26);
-        calendarHashMap.put(calendarCell_27, calendarCellNum_27);
-        calendarHashMap.put(calendarCell_28, calendarCellNum_28);
-        calendarHashMap.put(calendarCell_29, calendarCellNum_29);
-        calendarHashMap.put(calendarCell_30, calendarCellNum_30);
-        calendarHashMap.put(calendarCell_31, calendarCellNum_31);
-        calendarHashMap.put(calendarCell_32, calendarCellNum_32);
-        calendarHashMap.put(calendarCell_33, calendarCellNum_33);
-        calendarHashMap.put(calendarCell_34, calendarCellNum_34);
-        calendarHashMap.put(calendarCell_35, calendarCellNum_35);
-        calendarHashMap.put(calendarCell_36, calendarCellNum_36);
-        calendarHashMap.put(calendarCell_37, calendarCellNum_37);
-        calendarHashMap.put(calendarCell_38, calendarCellNum_38);
-        calendarHashMap.put(calendarCell_39, calendarCellNum_39);
-        calendarHashMap.put(calendarCell_40, calendarCellNum_40);
-        calendarHashMap.put(calendarCell_41, calendarCellNum_41);
-        calendarHashMap.put(calendarCell_42, calendarCellNum_42);
-        Set<Pane> calendarHashMapSet = calendarHashMap.keySet();
+        calendarMonthHashMap.put(calendarCell_1, calendarCellNum_1);
+        calendarMonthHashMap.put(calendarCell_2, calendarCellNum_2);
+        calendarMonthHashMap.put(calendarCell_3, calendarCellNum_3);
+        calendarMonthHashMap.put(calendarCell_4, calendarCellNum_4);
+        calendarMonthHashMap.put(calendarCell_5, calendarCellNum_5);
+        calendarMonthHashMap.put(calendarCell_6, calendarCellNum_6);
+        calendarMonthHashMap.put(calendarCell_7, calendarCellNum_7);
+        calendarMonthHashMap.put(calendarCell_8, calendarCellNum_8);
+        calendarMonthHashMap.put(calendarCell_9, calendarCellNum_9);
+        calendarMonthHashMap.put(calendarCell_10, calendarCellNum_10);
+        calendarMonthHashMap.put(calendarCell_11, calendarCellNum_11);
+        calendarMonthHashMap.put(calendarCell_12, calendarCellNum_12);
+        calendarMonthHashMap.put(calendarCell_13, calendarCellNum_13);
+        calendarMonthHashMap.put(calendarCell_14, calendarCellNum_14);
+        calendarMonthHashMap.put(calendarCell_15, calendarCellNum_15);
+        calendarMonthHashMap.put(calendarCell_16, calendarCellNum_16);
+        calendarMonthHashMap.put(calendarCell_17, calendarCellNum_17);
+        calendarMonthHashMap.put(calendarCell_18, calendarCellNum_18);
+        calendarMonthHashMap.put(calendarCell_19, calendarCellNum_19);
+        calendarMonthHashMap.put(calendarCell_20, calendarCellNum_20);
+        calendarMonthHashMap.put(calendarCell_21, calendarCellNum_21);
+        calendarMonthHashMap.put(calendarCell_22, calendarCellNum_22);
+        calendarMonthHashMap.put(calendarCell_23, calendarCellNum_23);
+        calendarMonthHashMap.put(calendarCell_24, calendarCellNum_24);
+        calendarMonthHashMap.put(calendarCell_25, calendarCellNum_25);
+        calendarMonthHashMap.put(calendarCell_26, calendarCellNum_26);
+        calendarMonthHashMap.put(calendarCell_27, calendarCellNum_27);
+        calendarMonthHashMap.put(calendarCell_28, calendarCellNum_28);
+        calendarMonthHashMap.put(calendarCell_29, calendarCellNum_29);
+        calendarMonthHashMap.put(calendarCell_30, calendarCellNum_30);
+        calendarMonthHashMap.put(calendarCell_31, calendarCellNum_31);
+        calendarMonthHashMap.put(calendarCell_32, calendarCellNum_32);
+        calendarMonthHashMap.put(calendarCell_33, calendarCellNum_33);
+        calendarMonthHashMap.put(calendarCell_34, calendarCellNum_34);
+        calendarMonthHashMap.put(calendarCell_35, calendarCellNum_35);
+        calendarMonthHashMap.put(calendarCell_36, calendarCellNum_36);
+        calendarMonthHashMap.put(calendarCell_37, calendarCellNum_37);
+        calendarMonthHashMap.put(calendarCell_38, calendarCellNum_38);
+        calendarMonthHashMap.put(calendarCell_39, calendarCellNum_39);
+        calendarMonthHashMap.put(calendarCell_40, calendarCellNum_40);
+        calendarMonthHashMap.put(calendarCell_41, calendarCellNum_41);
+        calendarMonthHashMap.put(calendarCell_42, calendarCellNum_42);
+        Set<Pane> calendarHashMapSet = calendarMonthHashMap.keySet();
 
         // Set calendar initial values
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
@@ -195,28 +193,30 @@ public class AppointmentsMonthlyController {
         // Iterate through the cells and populate them with correct day number
         for (Pane pane: calendarHashMapSet) {
 
+            // need css stylesheet for altering element appearance here as well
+
             // If the calendar index is greater-than or equal to the first weekday of the month, start the iteration
             if (calendarMapIndex >= calendar.get(Calendar.DAY_OF_WEEK) && !endOfMonth) {
-                calendarHashMap.get(pane).setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+                calendarMonthHashMap.get(pane).setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
                 pane.getStyleClass().remove("cal-empty-cell");
 
-                // Check if any appointments are on this day
+                // check for any appointments this day
                 if (!cachedData.getAppointmentsByDate(DateFormatter.formatToSimpleDate((calendar.getTime()), "iso")).isEmpty()) {
-                    if (!calendarHashMap.get(pane).getStyleClass().contains("cal-bold-text")) {
-                        calendarHashMap.get(pane).getStyleClass().add("cal-bold-text");
+                    if (!calendarMonthHashMap.get(pane).getStyleClass().contains("cal-bold-text")) {
+                        calendarMonthHashMap.get(pane).getStyleClass().add("cal-bold-text");
                     }
                 } else {
-                    calendarHashMap.get(pane).getStyleClass().remove("cal-bold-text");
+                    calendarMonthHashMap.get(pane).getStyleClass().remove("cal-bold-text");
                 }
 
                 // Check if this day is today's date
                 if (DateFormatter.formatToSimpleDate(calendar.getTime(), "iso").equals(DateFormatter.formatToIsoDate(LocalDateTime.now()))) {
-                    if (!calendarHashMap.get(pane).getStyleClass().contains("cal-blue-text")) {
-                        calendarHashMap.get(pane).getStyleClass().add("cal-blue-text");
-                        selectDay(pane, calendarHashMap.get(pane));
+                    if (!calendarMonthHashMap.get(pane).getStyleClass().contains("cal-blue-text")) {
+                        calendarMonthHashMap.get(pane).getStyleClass().add("cal-blue-text");
+                        selectDay(pane, calendarMonthHashMap.get(pane));
                     }
                 } else {
-                    calendarHashMap.get(pane).getStyleClass().remove("cal-blue-text");
+                    calendarMonthHashMap.get(pane).getStyleClass().remove("cal-blue-text");
                 }
 
                 if (calendar.get(Calendar.DAY_OF_MONTH) != calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
@@ -227,7 +227,7 @@ public class AppointmentsMonthlyController {
 
                 // Otherwise remove the text and color the pane gray
             } else {
-                calendarHashMap.get(pane).setText("");
+                calendarMonthHashMap.get(pane).setText("");
                 if (!pane.getStyleClass().contains("cal-empty-cell")) {
                     pane.getStyleClass().add("cal-empty-cell");
                 }
@@ -311,6 +311,7 @@ public class AppointmentsMonthlyController {
     private void setWeeklyToggleEvent() {
         apptsWeeklyToggle.setOnAction(actionEvent -> {
             try {
+                unselectDay();
                 SchedulingApplication.switchScenes(Paths.appointmentsWeeklyPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -320,14 +321,14 @@ public class AppointmentsMonthlyController {
 
     private void setCalendarNavigateButtonEvents() {
         calendarPreviousButton.setOnAction(actionEvent -> {
+            unselectDay();
             calendar.add(Calendar.MONTH, -1);
             populateCalendar();
-            unselectDay();
         });
         calendarNextButton.setOnAction(actionEvent -> {
+            unselectDay();
             calendar.add(Calendar.MONTH, 1);
             populateCalendar();
-            unselectDay();
         });
     }
 
@@ -353,7 +354,7 @@ public class AppointmentsMonthlyController {
         });
     }
 
-    private void setAppointmentTableListener() {
+    private void setAppointmentMonthlyTableListener() {
         // lambda instead of change listener?
         appointmentTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (appointmentTableView.getSelectionModel().getSelectedItem() != null) {

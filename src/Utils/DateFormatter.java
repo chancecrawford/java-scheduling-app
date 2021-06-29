@@ -11,6 +11,9 @@ public class DateFormatter {
             if (formatType.equals("month")) {
                 return new SimpleDateFormat("MMMM").format(date);
             }
+            if (formatType.equals("monthDay")) {
+                return new SimpleDateFormat("MMM d").format(date);
+            }
             if (formatType.equals("monthYear")) {
                 return new SimpleDateFormat("MMMM yyyy").format(date);
             }

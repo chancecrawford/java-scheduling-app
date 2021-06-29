@@ -64,7 +64,7 @@
                             <Insets right="100.0" />
                         </HBox.margin>
                     </Label>
-                    <ToggleButton fx:id="apptsMonthlyToggle" mnemonicParsing="false" text="Monthly" toggleGroup="$apptsToggleGroup">
+                    <ToggleButton fx:id="apptsMonthlyToggle" mnemonicParsing="false" text="Monthly">
                         <toggleGroup>
                             <ToggleGroup fx:id="apptsToggleGroup" />
                         </toggleGroup>
@@ -96,7 +96,7 @@
                         </padding>
                         <BorderPane prefHeight="50.0" prefWidth="200.0">
                             <center>
-                                <Label fx:id="calendarCurrentDate" text="Month Year" BorderPane.alignment="CENTER">
+                                <Label fx:id="calendarMonthYearLabel" BorderPane.alignment="CENTER">
                                     <font>
                                         <Font name="System Bold" size="12.0" />
                                     </font>
