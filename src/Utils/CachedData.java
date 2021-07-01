@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class CachedData {
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -79,14 +80,26 @@ public class CachedData {
     public ObservableList<Appointment> getAppointmentsByDate(String date) {
         // temp list to hold date matches
         ObservableList<Appointment> datesMatched = FXCollections.observableArrayList();
-        for (Appointment appointment:getAllAppointments()
-             ) {
+        for (Appointment appointment:getAllAppointments()) {
             if (appointment.getUserID() == SchedulingApplication.getUser().getId()
                 && DateFormatter.formatToIsoDate(appointment.getStart()).equals(date)) {
                 datesMatched.add(appointment);
             }
         }
         return datesMatched;
+    }
+
+    public ObservableList<Appointment> getAppointmentsByMonth(String date) {
+
+        // Create an array of results that match the date
+        ObservableList<Appointment> monthMatches = FXCollections.observableArrayList();
+        for (Appointment appointment:getAllAppointments()) {
+            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
+                    && appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
+                monthMatches.add(appointment);
+            }
+        }
+        return monthMatches;
     }
 
 //    public User getUserByUsername(String username) {

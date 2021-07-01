@@ -50,7 +50,7 @@ public class MainLoginController {
             if (InputValidation.checkLoginInputs(username, password)) {
                 if (authenticateUser(username, password)) {
                     try {
-                        SchedulingApplication.switchScenes(Paths.appointmentsMonthlyPath);
+                        SchedulingApplication.switchScenes(Paths.appointmentsPath);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

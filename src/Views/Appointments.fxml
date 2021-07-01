@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AppointmentsController">
+    <VBox prefHeight="519.0" prefWidth="832.0">
+        <ButtonBar id="navigation-menu" buttonMinWidth="100.0" prefHeight="92.0" prefWidth="916.0">
+            <buttons>
+                <Button fx:id="customerNavButton" layoutX="475.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" text="Customers">
+                    <styleClass>
+                        <String fx:value="navigation-item" />
+                        <String fx:value="clickable" />
+                    </styleClass>
+                </Button>
+            <Region layoutX="309.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                <Button fx:id="reportsNavButton" layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Reports">
+                    <styleClass>
+                        <String fx:value="navigation-item" />
+                        <String fx:value="clickable" />
+                    </styleClass>
+                </Button>
+            <Region layoutX="457.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                <Button fx:id="logoutButton" layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Log Out">
+                    <styleClass>
+                        <String fx:value="navigation-item" />
+                        <String fx:value="clickable" />
+                    </styleClass>
+                </Button>
+            </buttons>
+         <VBox.margin>
+            <Insets left="20.0" right="30.0" />
+         </VBox.margin>
+        </ButtonBar>
+        <StackPane id="large-content-container" prefHeight="460.0" prefWidth="889.0">
+            <VBox alignment="CENTER" prefHeight="455.0" prefWidth="889.0" StackPane.alignment="CENTER">
+                <HBox alignment="CENTER" prefHeight="49.0" prefWidth="752.0">
+                    <Label alignment="CENTER" text="Appointments" textAlignment="CENTER">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                        <HBox.margin>
+                            <Insets />
+                        </HBox.margin>
+                  <padding>
+                     <Insets right="70.0" />
+                  </padding>
+                    </Label>
+                    <ToggleButton fx:id="apptsMonthlyToggle" mnemonicParsing="false" selected="true" text="Monthly" toggleGroup="$apptsToggleGroup">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="apptsToggleGroup" />
+                        </toggleGroup>
+                        <styleClass>
+                            <String fx:value="toggle-button-left" />
+                            <String fx:value="toggle-button-active" />
+                        </styleClass>
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                        <HBox.margin>
+                            <Insets left="10.0" right="10.0" />
+                        </HBox.margin>
+                    </ToggleButton>
+                    <ToggleButton fx:id="apptsWeeklyToggle" mnemonicParsing="false" text="Weekly" toggleGroup="$apptsToggleGroup">
+                        <styleClass>
+                            <String fx:value="toggle-button-right" />
+                            <String fx:value="clickable" />
+                        </styleClass>
+                        <HBox.margin>
+                            <Insets left="10.0" right="100.0" />
+                        </HBox.margin>
+                    </ToggleButton>
+                     <BorderPane prefHeight="50.0" prefWidth="200.0">
+                         <center>
+                             <Label fx:id="dateRangeLabel" text="Month - Year" BorderPane.alignment="CENTER">
+                                 <font>
+                                     <Font name="System Bold" size="12.0" />
+                                 </font>
+                             </Label>
+                         </center>
+                         <left>
+                             <Button fx:id="calendarPreviousButton" mnemonicParsing="false" styleClass="clickable" text="&lt;" BorderPane.alignment="CENTER" />
+                         </left>
+                         <right>
+                             <Button fx:id="calendarNextButton" mnemonicParsing="false" styleClass="clickable" text="&gt;" BorderPane.alignment="CENTER" />
+                         </right>
+                     </BorderPane>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="346.0" prefWidth="752.0">
+                    <VBox prefHeight="346.0" prefWidth="754.0">
+                        <padding>
+                            <Insets left="10.0" />
+                        </padding>
+                        <TableView fx:id="appointmentTableView" prefHeight="329.0" prefWidth="581.0">
+                            <columns>
+                                <TableColumn fx:id="appointmentIDColumn" prefWidth="60.0" text="ID" />
+                                <TableColumn fx:id="appointmentTitleColumn" minWidth="0.0" prefWidth="60.0" text="Title" />
+                                <TableColumn fx:id="appointmentTypeColumn" minWidth="0.0" prefWidth="65.0" text="Type" />
+                                <TableColumn fx:id="appointmentLocationColumn" minWidth="0.0" prefWidth="60.0" text="Location" />
+                                <TableColumn fx:id="appointmentStartColumn" minWidth="0.0" prefWidth="75.0" text="Start" />
+                                <TableColumn fx:id="appointmentEndColumn" minWidth="0.0" prefWidth="75.0" text="End" />
+                                <TableColumn fx:id="appointmentCustIDColumn" minWidth="0.0" prefWidth="60.0" text="Cust ID" />
+                                <TableColumn fx:id="appointmentContactColumn" minWidth="0.0" prefWidth="60.0" text="Contact" />
+                                <TableColumn fx:id="appointmentDescColumn" minWidth="0.0" prefWidth="267.0" text="Desc" />
+                            </columns>
+                            <VBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </VBox.margin>
+                        </TableView>
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                             <Button fx:id="addButton" mnemonicParsing="false" prefWidth="75.0" text="Add" />
+                             <Button fx:id="editButton" disable="true" minWidth="75.0" mnemonicParsing="false" styleClass="fluid-button" text="Edit" />
+                             <Button fx:id="deleteButton" disable="true" minWidth="75.0" mnemonicParsing="false" text="Delete" />
+                    </buttons>
+                     <padding>
+                        <Insets right="210.0" />
+                     </padding>
+                  </ButtonBar>
+                  <HBox.margin>
+                     <Insets left="10.0" />
+                  </HBox.margin>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </VBox>
+</AnchorPane>
