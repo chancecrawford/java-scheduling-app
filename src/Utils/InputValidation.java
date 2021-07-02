@@ -23,4 +23,18 @@ public class InputValidation {
         }
         return true;
     }
+
+      // TODO: for when done with add appointments
+//    public static boolean areAppointmentInputsValid() {
+//
+//    }
+
+      // TODO: validations for when adding customer add/edit/delete
+//    public static boolean areCustomerInputsValid() {
+//
+//    }
+//
+//    public static boolean canCustomerBeDeleted() {
+//
+//    }
 }

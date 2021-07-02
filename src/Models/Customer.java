@@ -1,13 +1,8 @@
 package Models;
 
 public class Customer {
-    private int custID;
-    private int divisionID;
-
-    private String name;
-    private String address;
-    private String postalCode;
-    private String phoneNum;
+    private int custID, divisionID;
+    private String name, address, postalCode, phoneNum;
 
     public Customer (int custID, int divisionID, String name, String address, String postalCode, String phoneNum) {
         this.custID = custID;
@@ -18,6 +13,7 @@ public class Customer {
         this.phoneNum = phoneNum;
     }
 
+    // default constructor
     public Customer() { }
 
     public int getCustID() { return custID; }

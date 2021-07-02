@@ -42,14 +42,13 @@ public class CachedData {
                 );
                 addCustomer(customer);
             }
-        } catch (SQLException dbError) {
-            dbError.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         // need to add anything after this? like checks on the list?
     }
 
-    public void importAppointments() {
-        try {
+    public void importAppointments() throws SQLException {
             PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
             ResultSet appointmentResult = appointmentsStatement.executeQuery();
             while (appointmentResult.next()) {
@@ -71,11 +70,8 @@ public class CachedData {
                 );
                 addAppointment(appt);
             }
-        } catch (SQLException dbError) {
-            dbError.printStackTrace();
-        }
         // need to add anything after this? like checks on the list?
-    }
+        }
 
     public ObservableList<Appointment> getAppointmentsByDate(String date) {
         // temp list to hold date matches
@@ -102,6 +98,49 @@ public class CachedData {
         return monthMatches;
     }
 
+    // want a fresh pull from db in case new appt types have been added
+    public ObservableList<String> getAppointmentTypes() {
+        ObservableList<String> appointmentTypes = FXCollections.observableArrayList();
+        try {
+            PreparedStatement appointmentTypesStatement = Database.getDBConnection().prepareStatement("SELECT DISTINCT Type FROM appointments");
+            ResultSet appointmentTypesResult = appointmentTypesStatement.executeQuery();
+            while (appointmentTypesResult.next()) {
+                appointmentTypes.add(appointmentTypesResult.getString("Type"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return appointmentTypes;
+    }
+
+    public ObservableList<String> getContactsByName() {
+        ObservableList<String> contactNames = FXCollections.observableArrayList();
+        try {
+            PreparedStatement contactNamesStatement = Database.getDBConnection().prepareStatement("SELECT DISTINCT Contact_Name FROM contacts");
+            ResultSet contactNamesResult = contactNamesStatement.executeQuery();
+            while (contactNamesResult.next()) {
+                contactNames.add(contactNamesResult.getString("Contact_Name"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contactNames;
+    }
+
+    public ObservableList<String> getCustomersByName() {
+        ObservableList<String> customerNames = FXCollections.observableArrayList();
+        try {
+            PreparedStatement customerNamesStatement = Database.getDBConnection().prepareStatement("SELECT DISTINCT Customer_Name FROM customers");
+            ResultSet customerNamesResult = customerNamesStatement.executeQuery();
+            while (customerNamesResult.next()) {
+                customerNames.add(customerNamesResult.getString("Customer_Name"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return customerNames;
+    }
+
 //    public User getUserByUsername(String username) {
 //        User user = null;
 //        try {
@@ -117,4 +156,6 @@ public class CachedData {
 //        }
 //        return user;
 //    }
+
+    // TODO: create list of dates for start/end time choices in add/modify appointment
 }

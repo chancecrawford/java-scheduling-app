@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 public class AppointmentsController {
@@ -54,10 +55,11 @@ public class AppointmentsController {
     }
 
     private final Calendar calendar = Calendar.getInstance();
-    private final CachedData cachedData = new CachedData();
+    // want this public for referencing in add/edit views
+    public static final CachedData cachedData = new CachedData();
 
     @FXML
-    private void initialize() {
+    private void initialize() throws SQLException {
         // populate appointment table view
         setAppointmentColumns();
         appointmentTableView.setItems(appointmentTableItems);
