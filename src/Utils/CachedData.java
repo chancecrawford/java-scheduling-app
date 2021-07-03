@@ -14,8 +14,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class CachedData {
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -157,5 +159,31 @@ public class CachedData {
 //        return user;
 //    }
 
-    // TODO: create list of dates for start/end time choices in add/modify appointment
+    private final ObservableList<LocalTime> appointmentTimes = FXCollections.observableArrayList(
+            LocalTime.parse("00:00:00"), LocalTime.parse("00:15:00"), LocalTime.parse("00:00:00"), LocalTime.parse("00:00:00"),
+            LocalTime.parse("01:00:00"), LocalTime.parse("01:15:00"), LocalTime.parse("01:30:00"), LocalTime.parse("01:45:00"),
+            LocalTime.parse("02:00:00"), LocalTime.parse("02:15:00"), LocalTime.parse("02:30:00"), LocalTime.parse("02:45:00"),
+            LocalTime.parse("03:00:00"), LocalTime.parse("03:15:00"), LocalTime.parse("03:30:00"), LocalTime.parse("03:45:00"),
+            LocalTime.parse("04:00:00"), LocalTime.parse("04:15:00"), LocalTime.parse("04:30:00"), LocalTime.parse("04:45:00"),
+            LocalTime.parse("05:00:00"), LocalTime.parse("05:15:00"), LocalTime.parse("05:30:00"), LocalTime.parse("05:45:00"),
+            LocalTime.parse("06:00:00"), LocalTime.parse("06:15:00"), LocalTime.parse("06:30:00"), LocalTime.parse("06:45:00"),
+            LocalTime.parse("07:00:00"), LocalTime.parse("07:15:00"), LocalTime.parse("07:30:00"), LocalTime.parse("07:45:00"),
+            LocalTime.parse("08:00:00"), LocalTime.parse("08:15:00"), LocalTime.parse("08:30:00"), LocalTime.parse("08:45:00"),
+            LocalTime.parse("09:00:00"), LocalTime.parse("09:15:00"), LocalTime.parse("09:30:00"), LocalTime.parse("09:45:00"),
+            LocalTime.parse("10:00:00"), LocalTime.parse("10:15:00"), LocalTime.parse("10:30:00"), LocalTime.parse("10:45:00"),
+            LocalTime.parse("11:00:00"), LocalTime.parse("11:15:00"), LocalTime.parse("11:30:00"), LocalTime.parse("11:45:00"),
+            LocalTime.parse("12:00:00"), LocalTime.parse("12:15:00"), LocalTime.parse("12:30:00"), LocalTime.parse("12:45:00"),
+            LocalTime.parse("13:00:00"), LocalTime.parse("13:15:00"), LocalTime.parse("13:30:00"), LocalTime.parse("13:45:00"),
+            LocalTime.parse("14:00:00"), LocalTime.parse("14:15:00"), LocalTime.parse("14:30:00"), LocalTime.parse("14:45:00"),
+            LocalTime.parse("15:00:00"), LocalTime.parse("15:15:00"), LocalTime.parse("15:30:00"), LocalTime.parse("15:45:00"),
+            LocalTime.parse("16:00:00"), LocalTime.parse("16:15:00"), LocalTime.parse("16:30:00"), LocalTime.parse("16:45:00"),
+            LocalTime.parse("17:00:00"), LocalTime.parse("17:15:00"), LocalTime.parse("17:30:00"), LocalTime.parse("17:45:00"),
+            LocalTime.parse("18:00:00"), LocalTime.parse("18:15:00"), LocalTime.parse("18:30:00"), LocalTime.parse("18:45:00"),
+            LocalTime.parse("19:00:00"), LocalTime.parse("19:15:00"), LocalTime.parse("19:30:00"), LocalTime.parse("19:45:00"),
+            LocalTime.parse("20:00:00"), LocalTime.parse("20:15:00"), LocalTime.parse("20:30:00"), LocalTime.parse("20:45:00"),
+            LocalTime.parse("21:00:00"), LocalTime.parse("21:15:00"), LocalTime.parse("21:30:00"), LocalTime.parse("21:45:00"),
+            LocalTime.parse("22:00:00"), LocalTime.parse("22:15:00"), LocalTime.parse("22:30:00"), LocalTime.parse("22:45:00"),
+            LocalTime.parse("23:00:00"), LocalTime.parse("23:15:00"), LocalTime.parse("23:30:00"), LocalTime.parse("23:45:00")
+    );
+    public ObservableList<LocalTime> getAppointmentTimes() { return appointmentTimes; }
 }
