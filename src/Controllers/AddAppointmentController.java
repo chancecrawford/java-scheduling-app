@@ -6,6 +6,7 @@ import Models.Contact;
 import Utils.CachedData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,7 +48,11 @@ public class AddAppointmentController {
         startComboBox.setItems(cachedData.getAppointmentTimes());
         endComboBox.setItems(cachedData.getAppointmentTimes());
         // format because 24hr clock time confuses people
+        startComboBox.setButtonCell(cellFactory.call(null));
+        endComboBox.setButtonCell(cellFactory.call(null));
         formatTimes();
+        // set label for business hours
+        businessHoursLabel.setText(cachedData.businessOpen + " - " + cachedData.businessClose + " EST");
 
         setButtonActions();
     }
@@ -113,4 +118,27 @@ public class AddAppointmentController {
             }
         });
     }
+    // callback to reformat combobox selection for start/end
+    Callback<ListView<LocalTime>, ListCell<LocalTime>> cellFactory = new Callback<>() {
+        @Override
+        public ListCell<LocalTime> call(ListView<LocalTime> l) {
+            return new ListCell<>() {
+                @Override
+                protected void updateItem(LocalTime time, boolean empty) {
+                    super.updateItem(time, empty);
+                    if (time != null) {
+                        try {
+                            // clean this up and probs add it to DateFormatter
+                            SimpleDateFormat _24Format = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat _12Format = new SimpleDateFormat("hh:mm a");
+                            Date _24Date = _24Format.parse(time.toString());
+                            setText(_12Format.format(_24Date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+        }
+    };
 }

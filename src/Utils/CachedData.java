@@ -4,20 +4,16 @@ import Main.SchedulingApplication;
 import Models.Appointment;
 import Models.Customer;
 
-import Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class CachedData {
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -159,6 +155,10 @@ public class CachedData {
 //        return user;
 //    }
 
+    public final String businessOpen = "8:00 AM";
+    public final String businessClose = "10:00 PM";
+
+    // have this list as local times for easier conversion to dates for saving (?)
     private final ObservableList<LocalTime> appointmentTimes = FXCollections.observableArrayList(
             LocalTime.parse("00:00:00"), LocalTime.parse("00:15:00"), LocalTime.parse("00:00:00"), LocalTime.parse("00:00:00"),
             LocalTime.parse("01:00:00"), LocalTime.parse("01:15:00"), LocalTime.parse("01:30:00"), LocalTime.parse("01:45:00"),
