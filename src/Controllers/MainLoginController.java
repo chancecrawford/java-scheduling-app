@@ -29,8 +29,6 @@ public class MainLoginController {
 
     private static final ResourceBundle resBundle = ResourceBundle.getBundle("Locale/Login", Locale.forLanguageTag(Locale.getDefault().getCountry()));
 
-    private User user;
-
     @FXML
     private void initialize() {
         titleLabel.setText(resBundle.getString("loginTitle"));

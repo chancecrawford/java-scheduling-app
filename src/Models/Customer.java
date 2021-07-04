@@ -1,7 +1,8 @@
 package Models;
 
 public class Customer {
-    private int custID, divisionID;
+    private Integer custID;
+    private int divisionID;
     private String name, address, postalCode, phoneNum;
 
     public Customer (int custID, int divisionID, String name, String address, String postalCode, String phoneNum) {
@@ -16,7 +17,7 @@ public class Customer {
     // default constructor
     public Customer() { }
 
-    public int getCustID() { return custID; }
+    public Integer getCustID() { return custID; }
     public int getDivisionID() { return divisionID; }
     public String getName() { return name; }
     public String getAddress() { return address; }
@@ -29,4 +30,10 @@ public class Customer {
     public void setAddress(String address) { this.address = address; }
     public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
     public void setPhoneNum(String phoneNum) { this.phoneNum = phoneNum; }
+
+    // for display in when populating choice boxes in views
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -1,7 +1,7 @@
 package Utils;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -38,5 +38,10 @@ public class DateFormatter {
             return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         return null;
+    }
+
+    public static ZonedDateTime convertToUTC(LocalDate localDate, LocalTime localTime) {
+        LocalDateTime tempLDT = LocalDateTime.of(localDate, localTime);
+        return tempLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
     }
 }

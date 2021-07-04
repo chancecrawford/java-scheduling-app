@@ -3,7 +3,9 @@ package Controllers;
 import Data.Paths;
 import Main.SchedulingApplication;
 import Models.Contact;
+import Models.Customer;
 import Utils.CachedData;
+import Utils.InputValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
@@ -17,30 +19,27 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class AddAppointmentController {
-    @FXML
-    private TextField titleTextField, locationTextField;
-    @FXML
-    private ChoiceBox<String> typeChoiceBox, customerChoiceBox, contactChoiceBox;
-    @FXML
-    private TextArea descriptionTextArea;
-    @FXML
-    private DatePicker apptDatePicker;
-    @FXML
-    private ComboBox<LocalTime> startComboBox, endComboBox;
-    @FXML
-    private Label businessHoursLabel;
-    @FXML
-    private Button addButton, cancelButton;
+    @FXML private TextField titleTextField, locationTextField;
+    @FXML private ChoiceBox<String> typeChoiceBox;
+    @FXML private ChoiceBox<Customer> customerChoiceBox;
+    @FXML private ChoiceBox<Contact> contactChoiceBox;
+    @FXML private TextArea descriptionTextArea;
+    @FXML private DatePicker apptDatePicker;
+    @FXML private ComboBox<LocalTime> startComboBox, endComboBox;
+    @FXML private Label businessHoursLabel;
+    @FXML private Button addButton, cancelButton;
 
     public static final CachedData cachedData = AppointmentsController.cachedData;
 
-    private Contact selectedContact;
-
     @FXML
     private void initialize() {
+        // import needed data
+        cachedData.importContacts();
+        cachedData.importCustomers();
+        // set data and display values
         typeChoiceBox.setItems(cachedData.getAppointmentTypes());
-        customerChoiceBox.setItems(cachedData.getCustomersByName());
-        contactChoiceBox.setItems(cachedData.getContactsByName());
+        customerChoiceBox.setItems(cachedData.getAllCustomers());
+        contactChoiceBox.setItems(cachedData.getAllContacts());
 
         apptDatePicker.setValue(LocalDateTime.now().toLocalDate());
         disableDaysBeforeToday();
@@ -48,8 +47,8 @@ public class AddAppointmentController {
         startComboBox.setItems(cachedData.getAppointmentTimes());
         endComboBox.setItems(cachedData.getAppointmentTimes());
         // format because 24hr clock time confuses people
-        startComboBox.setButtonCell(cellFactory.call(null));
-        endComboBox.setButtonCell(cellFactory.call(null));
+        startComboBox.setButtonCell(timesCellFactory.call(null));
+        endComboBox.setButtonCell(timesCellFactory.call(null));
         formatTimes();
         // set label for business hours
         businessHoursLabel.setText(cachedData.businessOpen + " - " + cachedData.businessClose + " EST");
@@ -59,11 +58,33 @@ public class AddAppointmentController {
 
     private void setButtonActions() {
         addButton.setOnAction(actionEvent -> {
+            // make sure there is a selection for these dropdowns before passing to validation func
+            Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
+            Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
 
+            try {
+                if (InputValidation.areAppointmentInputsValid(
+                        titleTextField.getText(),
+                        typeChoiceBox.getSelectionModel().getSelectedItem(),
+                        customerID,
+                        contactID,
+                        locationTextField.getText(),
+                        apptDatePicker.getValue(),
+                        startComboBox.getSelectionModel().getSelectedItem(),
+                        endComboBox.getSelectionModel().getSelectedItem()
+                )) {
+                    System.out.println("Yay!");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         });
         cancelButton.setOnAction(actionEvent -> {
             try {
                 // TODO: add dialog for confirmation before cancelling
+                // clear these from cache since we won't need it in main appt screen
+                cachedData.clearContacts();
+                cachedData.clearCustomers();
                 SchedulingApplication.switchScenes(Paths.appointmentsPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,10 +102,8 @@ public class AddAppointmentController {
         });
     }
 
+    // formats LocalTime cells to display as 12hr time format
     private void formatTimes() {
-        // oh my god, this doesn't format the button cell
-        // saving this shit for tomorrow
-        // this is why Julius Caeser was stabbed to death
         startComboBox.setCellFactory(localTimeListView -> new ListCell<>() {
             public void updateItem(LocalTime time, boolean empty) {
                 super.updateItem(time, empty);
@@ -119,7 +138,7 @@ public class AddAppointmentController {
         });
     }
     // callback to reformat combobox selection for start/end
-    Callback<ListView<LocalTime>, ListCell<LocalTime>> cellFactory = new Callback<>() {
+    Callback<ListView<LocalTime>, ListCell<LocalTime>> timesCellFactory = new Callback<>() {
         @Override
         public ListCell<LocalTime> call(ListView<LocalTime> l) {
             return new ListCell<>() {
