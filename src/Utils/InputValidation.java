@@ -2,12 +2,10 @@ package Utils;
 
 import Controllers.AppointmentsController;
 import Data.Text;
-import Main.SchedulingApplication;
 import Models.Appointment;
 
 import java.text.ParseException;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -84,9 +82,9 @@ public class InputValidation {
                 if (!isAppointmentInBusinessHours(localDate, start, end)) {
                     inputErrors.append(Text.appointmentOutsideHoursError).append("\n");
                 }
-//            if (doesAppointmentConflictExist(localDate, start, end, customerID)) {
-//                inputErrors.append(Text.appointmentConflictError).append("\n");
-//            }
+                if (doesAppointmentConflictExist(localDate, start, end, customerID)) {
+                    inputErrors.append(Text.appointmentConflictError).append("\n");
+                }
             }
         }
 
@@ -121,14 +119,27 @@ public class InputValidation {
         LocalDateTime startLDT = LocalDateTime.of(localDate, start);
         LocalDateTime endLDT = LocalDateTime.of(localDate, end);
 
-        // TODO: this needs to check against schedules for customers
-        for (Appointment appointment:AppointmentsController.cachedData.getAppointmentsByDate(localDate.toString())) {
+        // TODO: need to add condition to check if appt is being edited or not
+        for (Appointment appointment : AppointmentsController.cachedData.getCustomerAppointmentsByDate(localDate.toString(), customerID)) {
             if ((startLDT.isAfter(appointment.getStart()) && startLDT.isBefore(appointment.getEnd())) ||
-                    (endLDT.isAfter(appointment.getStart()) && endLDT.isBefore(appointment.getEnd()))) {
-                return false;
+                    (endLDT.isAfter(appointment.getStart()) && endLDT.isBefore(appointment.getEnd())) ||
+                    startLDT.isEqual(appointment.getStart()) || endLDT.isEqual(appointment.getEnd())) {
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    public static int generateAppointmentID() {
+        int tempApptID = (int) (Math.random() * (9999 - 1 + 1) + 1);
+        for (Appointment appointment : AppointmentsController.cachedData.getAllAppointments()) {
+            if (tempApptID == appointment.getApptID()) {
+                generateAppointmentID();
+            } else {
+                return tempApptID;
+            }
+        }
+        return tempApptID;
     }
 
     // TODO: validations for when adding customer add/edit/delete

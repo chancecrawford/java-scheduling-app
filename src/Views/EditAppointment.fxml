@@ -1,14 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controllers.EditAppointmentController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditAppointmentController">
+    <VBox prefHeight="333.0" prefWidth="524.0">
+        <StackPane id="large-content-container" prefHeight="330.0" prefWidth="600.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                    <Label text="Edit Appointment">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+                </HBox>
+                <HBox prefHeight="200.0" prefWidth="200.0">
+                    <GridPane prefWidth="240.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="37.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="227.0" minWidth="10.0" prefWidth="213.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                     <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <HBox.margin>
+                            <Insets right="10.0" />
+                        </HBox.margin>
+                        <Label text="Title" GridPane.rowIndex="1" />
+                        <Label text="Type" GridPane.rowIndex="2" />
+                        <Label text="Description" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ChoiceBox fx:id="typeChoiceBox" prefHeight="25.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextArea fx:id="descriptionTextArea" prefHeight="93.0" prefWidth="208.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="ID" />
+                  <Label fx:id="apptIDLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="Appt ID" textAlignment="CENTER" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </Label>
+                    </GridPane>
+                    <GridPane prefWidth="240.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="67.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="190.0" minWidth="0.0" prefWidth="173.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                        <ChoiceBox fx:id="customerChoiceBox" layoutX="77.0" layoutY="40.0" prefWidth="173.0" GridPane.columnIndex="1" />
+                        <ChoiceBox fx:id="contactChoiceBox" prefWidth="173.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+                        <Label layoutX="10.0" layoutY="44.0" text="Customer" />
+                        <Label text="Contact" GridPane.rowIndex="1" />
+                        <Label text="Location" GridPane.rowIndex="2" />
+                        <Label text="Date" GridPane.rowIndex="3" />
+                        <Label text="Start Time" GridPane.rowIndex="4" />
+                        <DatePicker fx:id="apptDatePicker" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+                        <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+                        <Label text="End Time" GridPane.rowIndex="5" />
+                        <ComboBox fx:id="startComboBox" prefWidth="173.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="endComboBox" prefWidth="173.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Bus. Hours" GridPane.rowIndex="6" />
+                        <Label fx:id="businessHoursLabel" text="Opening Time - Closing Time" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <font>
+                                <Font name="System Italic" size="12.0" />
+                            </font>
+                        </Label>
+                    </GridPane>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                    <Button fx:id="saveButton" minWidth="75.0" mnemonicParsing="false" styleClass="fluid-button" text="Save">
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="cancelButton" minWidth="75.0" mnemonicParsing="false" text="Cancel">
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                    </Button>
+                </HBox>
+            </VBox>
+        </StackPane>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        </padding>
+    </VBox>
 </AnchorPane>

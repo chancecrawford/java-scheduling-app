@@ -4,6 +4,7 @@ import Data.Paths;
 import Main.SchedulingApplication;
 import Models.Appointment;
 import Utils.CachedData;
+import Utils.Database;
 import Utils.DateFormatter;
 
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
 
@@ -63,6 +65,7 @@ public class AppointmentsController {
         // populate appointment table view
         setAppointmentColumns();
         appointmentTableView.setItems(appointmentTableItems);
+        cachedData.importAppointments();
         populateAppointmentsTable();
         // set links and actions for buttons
         setNavigationButtonEvents();
@@ -71,7 +74,6 @@ public class AppointmentsController {
         setAppointmentEditingButtonEvents();
         // set listener to update appt table with appts for selected day
         setAppointmentMonthlyTableListener();
-        cachedData.importAppointments();
     }
 
     private void populateAppointmentsTable() {
@@ -128,6 +130,7 @@ public class AppointmentsController {
             try {
                 // want to set user to null as security measure
                 SchedulingApplication.setUser(null);
+                cachedData.clearAppointments();
                 SchedulingApplication.switchScenes(Paths.mainLoginPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -185,10 +188,39 @@ public class AppointmentsController {
             }
         });
         deleteButton.setOnAction(actionEvent -> {
-            // delete selected appointment in table view in db
-            // after confirm, delete from cached data
-            // refresh data in view
+            if (selectedAppointment != null) {
+                // can't use Alerts class here due to needing to verify against user response from alert
+                Alert deleteAppointmentWarning = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + selectedAppointment.getTitle() + "?", ButtonType.OK, ButtonType.CANCEL);
+                deleteAppointmentWarning.showAndWait();
+                // after user confirms, delete part
+                if (deleteAppointmentWarning.getResult() == ButtonType.OK) {
+                    try {
+                        PreparedStatement deleteApptStatement = Database.getDBConnection().prepareStatement("DELETE FROM appointments WHERE Appointment_ID = ?");
+                        deleteApptStatement.setInt(1, selectedAppointment.getApptID());
+                        int deleteResult = deleteApptStatement.executeUpdate();
+                        if (deleteResult == 1) {
+                            cachedData.deleteAppointment(selectedAppointment);
+                            appointmentTableView.getSelectionModel().select(null);
+                            refreshCache();
+                            populateAppointmentsTable();
+                            // TODO: add succcess alert here
+                            System.out.println("----- Appointment Deleted! -----");
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+            }
         });
+    }
+
+    private void refreshCache() throws SQLException {
+        // clear all lists to repopulate
+        cachedData.clearAppointments();
+        cachedData.clearContacts();
+        cachedData.clearCustomers();
+        // pull down fresh data
+        cachedData.importAppointments();
     }
 
     private void setAppointmentMonthlyTableListener() {

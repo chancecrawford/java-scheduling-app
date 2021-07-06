@@ -16,17 +16,17 @@ public class Appointment {
     private LocalDateTime start;
     private LocalDateTime end;
 
-    public Appointment (int apptID, int userID, int customerID, int contactID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end) {
+    public Appointment (int apptID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.apptID = apptID;
-        this.userID = userID;
-        this.customerID = customerID;
-        this.contactID = contactID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = start;
         this.end = end;
+        this.customerID = customerID;
+        this.userID = userID;
+        this.contactID = contactID;
     }
 
     public Appointment() { }

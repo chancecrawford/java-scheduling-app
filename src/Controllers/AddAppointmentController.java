@@ -2,20 +2,21 @@ package Controllers;
 
 import Data.Paths;
 import Main.SchedulingApplication;
+import Models.Appointment;
 import Models.Contact;
 import Models.Customer;
-import Utils.CachedData;
-import Utils.InputValidation;
+import Utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 
 public class AddAppointmentController {
@@ -49,7 +50,7 @@ public class AddAppointmentController {
         // format because 24hr clock time confuses people
         startComboBox.setButtonCell(timesCellFactory.call(null));
         endComboBox.setButtonCell(timesCellFactory.call(null));
-        formatTimes();
+        convertTimeSelectionCells();
         // set label for business hours
         businessHoursLabel.setText(cachedData.businessOpen + " - " + cachedData.businessClose + " EST");
 
@@ -74,17 +75,69 @@ public class AddAppointmentController {
                         endComboBox.getSelectionModel().getSelectedItem()
                 )) {
                     System.out.println("Yay!");
+                    // generate random appt id
+                    int tempApptID = InputValidation.generateAppointmentID();
+                    // get local date time
+                    LocalDateTime startLDT = LocalDateTime.of(apptDatePicker.getValue(), startComboBox.getValue());
+                    LocalDateTime endLDT = LocalDateTime.of(apptDatePicker.getValue(), endComboBox.getValue());
+                    // convert to UTC
+                    LocalDateTime startUTC = (startLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+                    LocalDateTime endUTC = (endLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+
+                    PreparedStatement saveApptStatement = Database.getDBConnection().prepareStatement("INSERT INTO appointments " +
+                            "(Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    saveApptStatement.setInt(1, tempApptID);
+                    saveApptStatement.setString(2, titleTextField.getText().trim());
+                    saveApptStatement.setString(3, descriptionTextArea.getText());
+                    saveApptStatement.setString(4, locationTextField.getText().trim());
+                    saveApptStatement.setString(5, typeChoiceBox.getValue().trim());
+                    saveApptStatement.setTimestamp(6, Timestamp.valueOf(startUTC));
+                    saveApptStatement.setTimestamp(7, Timestamp.valueOf(endUTC));
+                    saveApptStatement.setInt(8, customerID);
+                    saveApptStatement.setInt(9, SchedulingApplication.getUser().getId());
+                    saveApptStatement.setInt(10, contactID);
+
+                    //check if appt saved or not
+                    int saveResult = saveApptStatement.executeUpdate();
+                    if (saveResult == 1) {
+                        // add new appointment to cached data since save confirmed
+                        cachedData.addAppointment(new Appointment(
+                            tempApptID,
+                                titleTextField.getText().trim(),
+                                descriptionTextArea.getText(),
+                                locationTextField.getText().trim(),
+                                typeChoiceBox.getValue().trim(),
+                                startLDT,
+                                endLDT,
+                                customerID,
+                                SchedulingApplication.getUser().getId(),
+                                contactID
+                        ));
+                        // TODO: generate alert then close back to application scene after user closes alert
+                        System.out.println("----- Appointment Saved! -----");
+                    }
                 }
-            } catch (ParseException e) {
+            } catch (ParseException | SQLException e) {
+                e.printStackTrace();
+                Alerts.GenerateAlert("ERROR", "Appointment Save Error", "Appointment Save Error", "Appointment could not be saved!", "ShowAndWait");
+            }
+            cachedData.clearAppointments();
+            cachedData.clearContacts();
+            cachedData.clearCustomers();
+            try {
+                SchedulingApplication.switchScenes(Paths.appointmentsPath);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         cancelButton.setOnAction(actionEvent -> {
-            try {
-                // TODO: add dialog for confirmation before cancelling
                 // clear these from cache since we won't need it in main appt screen
+                cachedData.clearAppointments();
                 cachedData.clearContacts();
                 cachedData.clearCustomers();
+            try {
+                // TODO: add dialog for confirmation before cancelling
                 SchedulingApplication.switchScenes(Paths.appointmentsPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,7 +156,7 @@ public class AddAppointmentController {
     }
 
     // formats LocalTime cells to display as 12hr time format
-    private void formatTimes() {
+    private void convertTimeSelectionCells() {
         startComboBox.setCellFactory(localTimeListView -> new ListCell<>() {
             public void updateItem(LocalTime time, boolean empty) {
                 super.updateItem(time, empty);

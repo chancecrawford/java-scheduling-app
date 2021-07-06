@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -35,6 +36,10 @@ public class CachedData {
         allCustomers.add(newCustomer);
     }
 
+    public void deleteAppointment(Appointment appointment) { allAppointments.remove(appointment); }
+
+    public void deleteCustomer(Customer customer) { allCustomers.remove(customer); }
+
     public ObservableList<Appointment> getAllAppointments() {
         return allAppointments;
     }
@@ -46,6 +51,8 @@ public class CachedData {
     public ObservableList<Customer> getAllCustomers() {
         return allCustomers;
     }
+
+    public void clearAppointments() { allAppointments.clear(); }
 
     public void clearContacts() {
         allContacts.clear();
@@ -59,21 +66,24 @@ public class CachedData {
         PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
         ResultSet appointmentResult = appointmentsStatement.executeQuery();
         while (appointmentResult.next()) {
-            // retrieve and convert start/end timestamps to local time
-            LocalDateTime startLocalTime = appointmentResult.getTimestamp("Start").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            LocalDateTime endLocalTime = appointmentResult.getTimestamp("End").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            // convert to ldt (still UTC hours here)
+            LocalDateTime startUTC = LocalDateTime.parse(appointmentResult.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime endUTC = LocalDateTime.parse(appointmentResult.getString("End"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            // offset from UTC to local timezone
+            LocalDateTime startLocalTime = startUTC.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime endLocalTime = endUTC.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 
             Appointment appt = new Appointment(
                     appointmentResult.getInt("Appointment_ID"),
-                    appointmentResult.getInt("User_ID"),
-                    appointmentResult.getInt("Customer_ID"),
-                    appointmentResult.getInt("Contact_ID"),
                     appointmentResult.getString("Title"),
                     appointmentResult.getString("Description"),
                     appointmentResult.getString("Location"),
                     appointmentResult.getString("Type"),
                     startLocalTime,
-                    endLocalTime
+                    endLocalTime,
+                    appointmentResult.getInt("Customer_ID"),
+                    appointmentResult.getInt("User_ID"),
+                    appointmentResult.getInt("Contact_ID")
             );
             addAppointment(appt);
         }
@@ -89,7 +99,7 @@ public class CachedData {
                         contactsResult.getInt("Contact_ID"),
                         contactsResult.getString("Contact_Name"),
                         contactsResult.getString("Email")
-                        );
+                );
                 addContact(contact);
             }
         } catch (SQLException throwables) {
@@ -131,6 +141,19 @@ public class CachedData {
         return datesMatched;
     }
 
+    public ObservableList<Appointment> getCustomerAppointmentsByDate(String date, int customerID) {
+        // temp list to hold date matches
+        ObservableList<Appointment> datesMatched = FXCollections.observableArrayList();
+        for (Appointment appointment : getAllAppointments()) {
+            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
+                    && appointment.getCustomerID() == customerID
+                    && DateFormatter.formatToIsoDate(appointment.getStart()).equals(date)) {
+                datesMatched.add(appointment);
+            }
+        }
+        return datesMatched;
+    }
+
     public ObservableList<Appointment> getAppointmentsByMonth(String date) {
 
         // Create an array of results that match the date
@@ -159,32 +182,22 @@ public class CachedData {
         return appointmentTypes;
     }
 
-    public ObservableList<String> getContactsByName() {
-        ObservableList<String> contactNames = FXCollections.observableArrayList();
-        try {
-            PreparedStatement contactNamesStatement = Database.getDBConnection().prepareStatement("SELECT DISTINCT Contact_Name FROM contacts");
-            ResultSet contactNamesResult = contactNamesStatement.executeQuery();
-            while (contactNamesResult.next()) {
-                contactNames.add(contactNamesResult.getString("Contact_Name"));
+    public Contact getContactByID(int id) {
+        for (Contact contact:allContacts) {
+            if (contact.getContactID() == id) {
+                return contact;
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        return contactNames;
+        return null;
     }
 
-    public ObservableList<String> getCustomersByName() {
-        ObservableList<String> customerNames = FXCollections.observableArrayList();
-        try {
-            PreparedStatement customerNamesStatement = Database.getDBConnection().prepareStatement("SELECT DISTINCT Customer_Name FROM customers");
-            ResultSet customerNamesResult = customerNamesStatement.executeQuery();
-            while (customerNamesResult.next()) {
-                customerNames.add(customerNamesResult.getString("Customer_Name"));
+    public Customer getCustomerByID(int id) {
+        for (Customer customer:allCustomers) {
+            if (customer.getCustID() == id) {
+                return customer;
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        return customerNames;
+        return null;
     }
 
 //    public User getUserByUsername(String username) {
@@ -206,6 +219,7 @@ public class CachedData {
     // just for easier setting of label
     public final String businessOpen = "8:00 AM";
     public final String businessClose = "10:00 PM";
+
     // need to declare est time for start/end here
     public ZonedDateTime businessOpenZDT(LocalDate localDate) throws ParseException {
         // iso format for date to be in
@@ -217,6 +231,7 @@ public class CachedData {
         // return that date as converted zonedatetime to UTC
         return openHourDate.toInstant().atZone(ZoneId.of("UTC"));
     }
+
     public ZonedDateTime businessCloseZDT(LocalDate localDate) throws ParseException {
         // iso format for date to be in
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
