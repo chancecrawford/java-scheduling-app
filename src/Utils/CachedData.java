@@ -51,16 +51,15 @@ public class CachedData {
     public ObservableList<Customer> getAllCustomers() {
         return allCustomers;
     }
-
+    // funcs for clearing specific datasets or entire cache
     public void clearAppointments() { allAppointments.clear(); }
-
     public void clearContacts() {
         allContacts.clear();
     }
-
     public void clearCustomers() {
         allCustomers.clear();
     }
+    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); }
 
     public void importAppointments() throws SQLException {
         PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
@@ -139,6 +138,17 @@ public class CachedData {
             }
         }
         return datesMatched;
+    }
+
+    public ObservableList<Appointment> getAppointmentsByCustomerID(int customerID) {
+        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
+        for (Appointment appointment: getAllAppointments()) {
+            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
+                && customerID == appointment.getCustomerID()) {
+                customerAppointments.add(appointment);
+            }
+        }
+        return customerAppointments;
     }
 
     public ObservableList<Appointment> getCustomerAppointmentsByDate(String date, int customerID) {

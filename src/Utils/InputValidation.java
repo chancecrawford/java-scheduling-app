@@ -36,8 +36,8 @@ public class InputValidation {
         return true;
     }
 
-    // TODO: for when done with add appointments
     public static boolean areAppointmentInputsValid(
+            int apptID,
             String title,
             String type,
             Integer customerID,
@@ -45,7 +45,8 @@ public class InputValidation {
             String location,
             LocalDate localDate,
             LocalTime start,
-            LocalTime end) throws ParseException {
+            LocalTime end
+            ) throws ParseException {
         // use string builder to add all validation errors to push into one alert
         StringBuilder inputErrors = new StringBuilder();
 
@@ -82,7 +83,7 @@ public class InputValidation {
                 if (!isAppointmentInBusinessHours(localDate, start, end)) {
                     inputErrors.append(Text.appointmentOutsideHoursError).append("\n");
                 }
-                if (doesAppointmentConflictExist(localDate, start, end, customerID)) {
+                if (doesAppointmentConflictExist(localDate, start, end, customerID, apptID)) {
                     inputErrors.append(Text.appointmentConflictError).append("\n");
                 }
             }
@@ -115,16 +116,18 @@ public class InputValidation {
                 !DateFormatter.convertToUTC(localDate, end).isAfter(endBusinessTime);
     }
 
-    public static boolean doesAppointmentConflictExist(LocalDate localDate, LocalTime start, LocalTime end, int customerID) {
+    public static boolean doesAppointmentConflictExist(LocalDate localDate, LocalTime start, LocalTime end, int customerID, int apptID) {
         LocalDateTime startLDT = LocalDateTime.of(localDate, start);
         LocalDateTime endLDT = LocalDateTime.of(localDate, end);
 
-        // TODO: need to add condition to check if appt is being edited or not
         for (Appointment appointment : AppointmentsController.cachedData.getCustomerAppointmentsByDate(localDate.toString(), customerID)) {
-            if ((startLDT.isAfter(appointment.getStart()) && startLDT.isBefore(appointment.getEnd())) ||
-                    (endLDT.isAfter(appointment.getStart()) && endLDT.isBefore(appointment.getEnd())) ||
-                    startLDT.isEqual(appointment.getStart()) || endLDT.isEqual(appointment.getEnd())) {
-                return true;
+            // if apptID is the same, skip this since it can't conflict with previous appt info
+            if (apptID != appointment.getApptID()) {
+                if ((startLDT.isAfter(appointment.getStart()) && startLDT.isBefore(appointment.getEnd())) ||
+                        (endLDT.isAfter(appointment.getStart()) && endLDT.isBefore(appointment.getEnd())) ||
+                        startLDT.isEqual(appointment.getStart()) || endLDT.isEqual(appointment.getEnd())) {
+                    return true;
+                }
             }
         }
         return false;

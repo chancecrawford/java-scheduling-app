@@ -20,18 +20,21 @@ import java.util.Calendar;
 
 public class AppointmentsController {
     // view navigation
-    @FXML private Button customerNavButton, reportsNavButton, logoutButton;
+    @FXML
+    private Button customerNavButton, reportsNavButton, logoutButton;
     // toggles for month/week
-    @FXML private ToggleButton apptsWeeklyToggle, apptsMonthlyToggle;
+    @FXML
+    private ToggleButton apptsWeeklyToggle, apptsMonthlyToggle;
     // calendar elements
     @FXML
     private Label dateRangeLabel;
     @FXML
     private Button calendarPreviousButton, calendarNextButton;
-
     // tableview and columns for appointments
-    @FXML private TableView<Appointment> appointmentTableView;
-    @FXML private TableColumn<Appointment, String>
+    @FXML
+    private TableView<Appointment> appointmentTableView;
+    @FXML
+    private TableColumn<Appointment, String>
             appointmentIDColumn,
             appointmentTitleColumn,
             appointmentTypeColumn,
@@ -42,7 +45,8 @@ public class AppointmentsController {
             appointmentContactColumn,
             appointmentDescColumn;
     // appointment manipulation buttons
-    @FXML private Button addButton, editButton, deleteButton;
+    @FXML
+    private Button addButton, editButton, deleteButton;
 
     private final ObservableList<Appointment> appointmentTableItems = FXCollections.observableArrayList();
     // for keeping track of selections
@@ -52,12 +56,14 @@ public class AppointmentsController {
     public static Appointment getSelectedAppointment() {
         return selectedAppointment;
     }
+
     public static void setSelectedAppointment(Appointment appointment) {
         selectedAppointment = appointment;
     }
 
     private final Calendar calendar = Calendar.getInstance();
     // want this public for referencing in add/edit views
+    // TODO: should do this in Main and just not pull data until after login?
     public static final CachedData cachedData = new CachedData();
 
     @FXML
@@ -73,7 +79,7 @@ public class AppointmentsController {
         setCalendarNavigateButtonEvents();
         setAppointmentEditingButtonEvents();
         // set listener to update appt table with appts for selected day
-        setAppointmentMonthlyTableListener();
+        setAppointmentTableListener();
     }
 
     private void populateAppointmentsTable() {
@@ -114,6 +120,7 @@ public class AppointmentsController {
     private void setNavigationButtonEvents() {
         customerNavButton.setOnAction(actionEvent -> {
             try {
+                cachedData.clearAppointments();
                 SchedulingApplication.switchScenes(Paths.customersPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -121,6 +128,7 @@ public class AppointmentsController {
         });
         reportsNavButton.setOnAction(actionEvent -> {
             try {
+                cachedData.clearAppointments();
                 SchedulingApplication.switchScenes(Paths.reportAppointmentTypeMonthPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -130,7 +138,7 @@ public class AppointmentsController {
             try {
                 // want to set user to null as security measure
                 SchedulingApplication.setUser(null);
-                cachedData.clearAppointments();
+                cachedData.clearCache();
                 SchedulingApplication.switchScenes(Paths.mainLoginPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -216,14 +224,12 @@ public class AppointmentsController {
 
     private void refreshCache() throws SQLException {
         // clear all lists to repopulate
-        cachedData.clearAppointments();
-        cachedData.clearContacts();
-        cachedData.clearCustomers();
+        cachedData.clearCache();
         // pull down fresh data
         cachedData.importAppointments();
     }
 
-    private void setAppointmentMonthlyTableListener() {
+    private void setAppointmentTableListener() {
         // used lambda for setting listeners on table view
         appointmentTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (appointmentTableView.getSelectionModel().getSelectedItem() != null) {

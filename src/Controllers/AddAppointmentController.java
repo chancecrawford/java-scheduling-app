@@ -59,12 +59,15 @@ public class AddAppointmentController {
 
     private void setButtonActions() {
         addButton.setOnAction(actionEvent -> {
+            // generate random appt id
+            int tempApptID = InputValidation.generateAppointmentID();
             // make sure there is a selection for these dropdowns before passing to validation func
             Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
             Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
 
             try {
                 if (InputValidation.areAppointmentInputsValid(
+                        tempApptID,
                         titleTextField.getText(),
                         typeChoiceBox.getSelectionModel().getSelectedItem(),
                         customerID,
@@ -74,9 +77,6 @@ public class AddAppointmentController {
                         startComboBox.getSelectionModel().getSelectedItem(),
                         endComboBox.getSelectionModel().getSelectedItem()
                 )) {
-                    System.out.println("Yay!");
-                    // generate random appt id
-                    int tempApptID = InputValidation.generateAppointmentID();
                     // get local date time
                     LocalDateTime startLDT = LocalDateTime.of(apptDatePicker.getValue(), startComboBox.getValue());
                     LocalDateTime endLDT = LocalDateTime.of(apptDatePicker.getValue(), endComboBox.getValue());

@@ -7,11 +7,11 @@ public class Customer {
 
     public Customer (int custID, int divisionID, String name, String address, String postalCode, String phoneNum) {
         this.custID = custID;
-        this.divisionID = divisionID;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
         this.phoneNum = phoneNum;
+        this.divisionID = divisionID;
     }
 
     // default constructor
@@ -31,7 +31,7 @@ public class Customer {
     public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
     public void setPhoneNum(String phoneNum) { this.phoneNum = phoneNum; }
 
-    // for display in when populating choice boxes in views
+    // for display when populating choice boxes in views
     @Override
     public String toString() {
         return name;

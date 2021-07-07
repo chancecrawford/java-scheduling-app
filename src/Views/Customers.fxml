@@ -6,80 +6,69 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CustomersController">
     <VBox prefHeight="400.0" prefWidth="600.0">
-        <ButtonBar id="navigation-menu" prefHeight="60.0" prefWidth="600.0">
+        <ButtonBar id="navigation-menu" prefHeight="60.0" prefWidth="546.0">
             <buttons>
-                <Button mnemonicParsing="false" text="Appointments">
+                <Button fx:id="appointmentsNavButton" maxWidth="175.0" mnemonicParsing="false" text="Appointments">
                     <styleClass>
                         <String fx:value="navigation-item" />
                         <String fx:value="clickable" />
                     </styleClass>
                 </Button>
-                <Button layoutX="475.0" layoutY="10.0" maxWidth="100.0" mnemonicParsing="false" text="Customers">
-                    <styleClass>
-                        <String fx:value="navigation-item" />
-                        <String fx:value="navigation-item-selected" />
-                    </styleClass>
-                </Button>
-                <Button layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Reports">
+            <Region prefHeight="200.0" prefWidth="200.0" />
+                <Button fx:id="reportsNavButton" layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Reports">
                     <styleClass>
                         <String fx:value="navigation-item" />
                         <String fx:value="clickable" />
                     </styleClass>
                 </Button>
-                <Button layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Log Out">
+            <Region prefHeight="200.0" prefWidth="200.0" />
+                <Button fx:id="logoutButton" layoutX="475.0" layoutY="10.0" maxWidth="75.0" mnemonicParsing="false" text="Log Out">
                     <styleClass>
                         <String fx:value="navigation-item" />
                         <String fx:value="clickable" />
                     </styleClass>
                 </Button>
             </buttons>
-         <padding>
-            <Insets right="110.0" />
-         </padding>
         </ButtonBar>
         <StackPane id="large-content-container" prefHeight="330.0" prefWidth="600.0">
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
-                    <TextField fx:id="searchTextField" />
-                    <Button fx:id="searchButton" mnemonicParsing="false" prefWidth="75.0" text="Search">
-                        <HBox.margin>
-                            <Insets left="10.0" />
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-                <TableView fx:id="customerTableView" prefHeight="200.0" prefWidth="200.0">
+                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0" />
+                <TableView fx:id="customerTableView" prefHeight="333.0" prefWidth="580.0">
                     <columns>
-                        <TableColumn fx:id="customerNameColumn" prefWidth="185.0" text="Name" />
-                        <TableColumn fx:id="customerAddressColumn" prefWidth="293.0" text="Address" />
-                        <TableColumn fx:id="customerPhoneColumn" prefWidth="121.0" text="Phone" />
+                  <TableColumn fx:id="customerIDColumn" prefWidth="52.0" text="ID" />
+                        <TableColumn fx:id="customerNameColumn" prefWidth="116.0" text="Name" />
+                        <TableColumn fx:id="customerAddressColumn" prefWidth="127.0" text="Address" />
+                  <TableColumn fx:id="customerPostalCodeColumn" prefWidth="78.0" text="Postal Code" />
+                        <TableColumn fx:id="customerPhoneColumn" prefWidth="133.0" text="Phone" />
+                  <TableColumn fx:id="customerDivisionIDColumn" prefWidth="73.0" text="Division ID" />
                     </columns>
                 </TableView>
-                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
                     <VBox.margin>
-                        <Insets />
+                        <Insets top="10.0" />
                     </VBox.margin>
-                    <Button fx:id="deleteButton" minWidth="75.0" mnemonicParsing="false" text="Delete">
+                    <Button fx:id="addButton" minWidth="75.0" mnemonicParsing="false" styleClass="fluid-button" text="Add">
                         <HBox.margin>
                             <Insets />
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="editButton" minWidth="75.0" mnemonicParsing="false" text="Edit">
+                    <Button fx:id="editButton" disable="true" minWidth="75.0" mnemonicParsing="false" text="Edit">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
                     </Button>
-                    <Button minWidth="75.0" mnemonicParsing="false" styleClass="fluid-button" text="Add">
+                    <Button fx:id="deleteButton" disable="true" minWidth="75.0" mnemonicParsing="false" text="Delete">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
@@ -87,5 +76,8 @@
                 </HBox>
             </VBox>
         </StackPane>
+      <padding>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
     </VBox>
 </AnchorPane>

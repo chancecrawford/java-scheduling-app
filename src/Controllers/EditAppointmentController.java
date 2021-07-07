@@ -46,6 +46,7 @@ public class EditAppointmentController {
         cachedData.importContacts();
         cachedData.importCustomers();
         // set data and display values
+        // TODO: change this to disabled text field
         apptIDLabel.setText(String.valueOf(selectedAppointment.getApptID()));
         // appt title
         titleTextField.setText(selectedAppointment.getTitle());
@@ -88,6 +89,7 @@ public class EditAppointmentController {
 
             try {
                 if (InputValidation.areAppointmentInputsValid(
+                        selectedAppointment.getApptID(),
                         titleTextField.getText(),
                         typeChoiceBox.getSelectionModel().getSelectedItem(),
                         customerID,
@@ -155,7 +157,7 @@ public class EditAppointmentController {
             cachedData.clearCustomers();
             AppointmentsController.setSelectedAppointment(null);
             try {
-                // TODO: add dialog for confirmation before cancelling
+                // TODO: add dialog for confirmation before cancelling that contains appt id and type
                 SchedulingApplication.switchScenes(Paths.appointmentsPath);
             } catch (IOException e) {
                 e.printStackTrace();
