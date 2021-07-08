@@ -13,4 +13,11 @@ public class Text {
     public static String appointmentEndNotAfterStartError = "The end of the appointment cannot be before the start of it.";
     public static String appointmentOutsideHoursError = "Appointments cannot be scheduled outside of business hours or on weekends.";
     public static String appointmentConflictError = "This appointment conflicts with another customer appointment.";
+    // customer error messages
+    public static String customerNameError = "Entry for customer name is missing";
+    public static String customerAddressError = "Entry for customer address is missing";
+    public static String customerCityError = "A city must be selected for the customer";
+    public static String customerCountryError = "A country must be selected for the customer";
+    public static String customerPostalCodeError = "Entry for the customer postal code is missing or invalid";
+    public static String customerPhoneNumberError = "Entry for the customer phone number is missing or invalid";
 }

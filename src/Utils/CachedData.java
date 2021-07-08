@@ -5,6 +5,7 @@ import Models.Appointment;
 import Models.Contact;
 import Models.Customer;
 
+import Models.Division;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -23,6 +24,7 @@ public class CachedData {
     private static final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static final ObservableList<Contact> allContacts = FXCollections.observableArrayList();
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private static final ObservableList<Division> allDivisions = FXCollections.observableArrayList();
 
     public void addAppointment(Appointment newAppointment) {
         allAppointments.add(newAppointment);
@@ -35,6 +37,8 @@ public class CachedData {
     public void addCustomer(Customer newCustomer) {
         allCustomers.add(newCustomer);
     }
+
+    public void addDivision(Division division) { allDivisions.add(division); }
 
     public void deleteAppointment(Appointment appointment) { allAppointments.remove(appointment); }
 
@@ -51,6 +55,9 @@ public class CachedData {
     public ObservableList<Customer> getAllCustomers() {
         return allCustomers;
     }
+
+    public ObservableList<Division> getAllDivisions() { return allDivisions; }
+
     // funcs for clearing specific datasets or entire cache
     public void clearAppointments() { allAppointments.clear(); }
     public void clearContacts() {
@@ -59,7 +66,10 @@ public class CachedData {
     public void clearCustomers() {
         allCustomers.clear();
     }
-    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); }
+    public void clearDivisions() { allDivisions.clear(); }
+    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); allDivisions.clear(); }
+
+    public ObservableList<String> getCountries() { return countries; }
 
     public void importAppointments() throws SQLException {
         PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
@@ -126,6 +136,23 @@ public class CachedData {
             throwables.printStackTrace();
         }
         // need to add anything after this? like checks on the list?
+    }
+
+    public void importDivisions() {
+        try {
+            PreparedStatement divisionStatement = Database.getDBConnection().prepareStatement("SELECT * FROM first_level_divisions");
+            ResultSet divisions = divisionStatement.executeQuery();
+            while (divisions.next()) {
+                Division division = new Division(
+                        divisions.getInt("Division_ID"),
+                        divisions.getString("Division"),
+                        divisions.getInt("Country_ID")
+                );
+                addDivision(division);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public ObservableList<Appointment> getAppointmentsByDate(String date) {
@@ -210,21 +237,35 @@ public class CachedData {
         return null;
     }
 
-//    public User getUserByUsername(String username) {
-//        User user = null;
-//        try {
-//            PreparedStatement userStatement = Database.getDBConnection().prepareStatement("SELECT * FROM users WHERE User_Name =?");
-//            ResultSet userResult = userStatement.executeQuery();
-//            user = new User(
-//                    userResult.getInt("User_ID"),
-//                    userResult.getString("User_Name"),
-//                    userResult.getString("Password")
-//            );
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return user;
-//    }
+    public ObservableList<Division> getDivisionsByCountryID(int id) {
+        ObservableList<Division> divisionsByCountry = FXCollections.observableArrayList();
+        for (Division division:allDivisions) {
+            if (division.getCountryID() == id) {
+                divisionsByCountry.add(division);
+            }
+        }
+        return divisionsByCountry;
+    }
+
+    private final ObservableList<String> countries = FXCollections.observableArrayList(
+            "United States",
+            "United Kingdom",
+            "Canada"
+    );
+
+    public final Integer getCountryID(String country) {
+        if (country.equals("United States")) {
+            return 1;
+        }
+        if (country.equals("United Kingdom")) {
+            return 2;
+        }
+        if (country.equals("Canada")) {
+            return 3;
+        }
+        return null;
+    }
+
 
     // just for easier setting of label
     public final String businessOpen = "8:00 AM";

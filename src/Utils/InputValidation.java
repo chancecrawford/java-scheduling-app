@@ -1,8 +1,10 @@
 package Utils;
 
 import Controllers.AppointmentsController;
+import Controllers.CustomersController;
 import Data.Text;
 import Models.Appointment;
+import Models.Customer;
 
 import java.text.ParseException;
 import java.time.*;
@@ -10,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InputValidation {
     private static final ResourceBundle resBundle = ResourceBundle.getBundle("Locale/Login", Locale.forLanguageTag(Locale.getDefault().getCountry()));
@@ -91,7 +95,7 @@ public class InputValidation {
 
         // generates alert and populates it with error messages if inputErrors string builder isn't empty
         if (inputErrors.length() > 0 || !inputErrors.toString().equals("")) {
-            Alerts.GenerateAlert("WARNING", "Part Entry Warning", "Required Fields Empty or Invalid", inputErrors.toString(), "ShowAndWait");
+            Alerts.GenerateAlert("WARNING", "Appointment Entry Warning", "Required Fields Empty or Invalid", inputErrors.toString(), "ShowAndWait");
             return false;
         }
         return true;
@@ -145,12 +149,58 @@ public class InputValidation {
         return tempApptID;
     }
 
-    // TODO: validations for when adding customer add/edit/delete
-//    public static boolean areCustomerInputsValid() {
-//
-//    }
-//
-//    public static boolean canCustomerBeDeleted() {
-//
-//    }
+    public static boolean areCustomerInputsValid(String name, String address1, Integer divisionID, Integer countryID, String postalCode, String phoneNum) {
+        StringBuilder inputErrors = new StringBuilder();
+
+        if (isInputNull(name)) {
+            inputErrors.append(Text.customerNameError).append("\n");
+        }
+        if (isInputNull(address1)) {
+            inputErrors.append(Text.customerAddressError).append("\n");
+        }
+        if (divisionID == null) {
+            inputErrors.append(Text.customerCityError).append("\n");
+        }
+        if (countryID == null) {
+            inputErrors.append(Text.customerCountryError).append("\n");
+        }
+        if (isInputNull(postalCode) || postalCode.length() != 5) {
+            inputErrors.append(Text.customerPostalCodeError).append("\n");
+        }
+        if (isInputNull(phoneNum) || !isPhoneNumberValid(phoneNum)) {
+            inputErrors.append(Text.customerPhoneNumberError).append("\n");
+        }
+
+        // generates alert and populates it with error messages if inputErrors string builder isn't empty
+        if (inputErrors.length() > 0 || !inputErrors.toString().equals("")) {
+            Alerts.GenerateAlert("WARNING", "Customer Entry Warning", "Required Fields Empty or Invalid", inputErrors.toString(), "ShowAndWait");
+            return false;
+        }
+        return true;
+    }
+
+    public static int generateCustomerID() {
+        int tempApptID = (int) (Math.random() * (9999 - 1 + 1) + 1);
+        for (Customer customer : CustomersController.cachedData.getAllCustomers()) {
+            if (tempApptID == customer.getCustID()) {
+                generateAppointmentID();
+            } else {
+                return tempApptID;
+            }
+        }
+        return tempApptID;
+    }
+
+    // source for regex --> https://www.baeldung.com/java-regex-validate-phone-numbers
+    public static boolean isPhoneNumberValid(String phoneNum) {
+        // TODO: regex doesn't allow dashes or international codes
+        String patterns
+                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(phoneNum);
+        return matcher.matches();
+    }
 }
