@@ -191,13 +191,10 @@ public class InputValidation {
         return tempApptID;
     }
 
-    // source for regex --> https://www.baeldung.com/java-regex-validate-phone-numbers
+    // source for regex --> https://regexr.com/38pvb
     public static boolean isPhoneNumberValid(String phoneNum) {
         // TODO: regex doesn't allow dashes or international codes
-        String patterns
-                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+        String patterns = "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$";
 
         Pattern pattern = Pattern.compile(patterns);
         Matcher matcher = pattern.matcher(phoneNum);

@@ -70,16 +70,15 @@ public class AddCustomerController {
         });
     }
 
-    // code from here --> https://stackoverflow.com/a/30796829/14312406
     private void preventNonNumerics() {
         // lambda for better iteration
         postalCodeTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
+            if (!newValue.matches("[\\d*]")) {
                 postalCodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
         phoneTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
+            if (!newValue.matches("^[\\d -]+$")) {
                 phoneTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
