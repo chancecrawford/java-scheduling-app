@@ -1,18 +1,14 @@
 package Utils;
 
 import Main.SchedulingApplication;
-import Models.Appointment;
-import Models.Contact;
-import Models.Customer;
+import Models.*;
 
-import Models.Division;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -24,6 +20,7 @@ public class CachedData {
     private static final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static final ObservableList<Contact> allContacts = FXCollections.observableArrayList();
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private static final ObservableList<Country> allCountries = FXCollections.observableArrayList();
     private static final ObservableList<Division> allDivisions = FXCollections.observableArrayList();
 
     public void addAppointment(Appointment newAppointment) {
@@ -37,6 +34,8 @@ public class CachedData {
     public void addCustomer(Customer newCustomer) {
         allCustomers.add(newCustomer);
     }
+
+    public void addCountry(Country country) { allCountries.add(country); }
 
     public void addDivision(Division division) { allDivisions.add(division); }
 
@@ -56,6 +55,8 @@ public class CachedData {
         return allCustomers;
     }
 
+    public ObservableList<Country> getAllCountries() { return allCountries; }
+
     public ObservableList<Division> getAllDivisions() { return allDivisions; }
 
     // funcs for clearing specific datasets or entire cache
@@ -66,10 +67,9 @@ public class CachedData {
     public void clearCustomers() {
         allCustomers.clear();
     }
+    public void clearCountries() { allCountries.clear(); }
     public void clearDivisions() { allDivisions.clear(); }
-    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); allDivisions.clear(); }
-
-    public ObservableList<String> getCountries() { return countries; }
+    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); allCountries.clear(); allDivisions.clear(); }
 
     public void importAppointments() throws SQLException {
         PreparedStatement appointmentsStatement = Database.getDBConnection().prepareStatement("SELECT * FROM appointments");
@@ -124,11 +124,11 @@ public class CachedData {
             while (customerResult.next()) {
                 Customer customer = new Customer(
                         customerResult.getInt("Customer_ID"),
-                        customerResult.getInt("Division_ID"),
                         customerResult.getString("Customer_Name"),
                         customerResult.getString("Address"),
                         customerResult.getString("Postal_Code"),
-                        customerResult.getString("Phone")
+                        customerResult.getString("Phone"),
+                        customerResult.getInt("Division_ID")
                 );
                 addCustomer(customer);
             }
@@ -237,6 +237,15 @@ public class CachedData {
         return null;
     }
 
+    public Division getDivisionByID(int id) {
+        for (Division division:allDivisions) {
+            if (division.getDivisionID() == id) {
+                return division;
+            }
+        }
+        return null;
+    }
+
     public ObservableList<Division> getDivisionsByCountryID(int id) {
         ObservableList<Division> divisionsByCountry = FXCollections.observableArrayList();
         for (Division division:allDivisions) {
@@ -247,21 +256,27 @@ public class CachedData {
         return divisionsByCountry;
     }
 
-    private final ObservableList<String> countries = FXCollections.observableArrayList(
-            "United States",
-            "United Kingdom",
-            "Canada"
-    );
+    public void importCountries() {
+        try {
+            PreparedStatement countryStatement = Database.getDBConnection().prepareStatement("SELECT * FROM countries");
+            ResultSet countriesResult = countryStatement.executeQuery();
+            while (countriesResult.next()) {
+                Country country = new Country(
+                        countriesResult.getInt("Country_ID"),
+                        countriesResult.getString("Country")
+                );
+                allCountries.add(country);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
-    public final Integer getCountryID(String country) {
-        if (country.equals("United States")) {
-            return 1;
-        }
-        if (country.equals("United Kingdom")) {
-            return 2;
-        }
-        if (country.equals("Canada")) {
-            return 3;
+    public Country getCountryByID(int countryID) {
+        for (Country country:allCountries) {
+            if (country.getId() == countryID) {
+                return country;
+            }
         }
         return null;
     }

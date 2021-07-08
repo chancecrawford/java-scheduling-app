@@ -193,7 +193,6 @@ public class InputValidation {
 
     // source for regex --> https://regexr.com/38pvb
     public static boolean isPhoneNumberValid(String phoneNum) {
-        // TODO: regex doesn't allow dashes or international codes
         String patterns = "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$";
 
         Pattern pattern = Pattern.compile(patterns);
