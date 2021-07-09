@@ -219,6 +219,16 @@ public class CachedData {
         return appointmentTypes;
     }
 
+    public int getAppointmentTotalByType(ObservableList<Appointment> appointments, String type) {
+        int total = 0;
+        for (Appointment appointment:appointments) {
+            if (appointment.getType().equals(type)) {
+                total++;
+            }
+        }
+        return total;
+    }
+
     public Contact getContactByID(int id) {
         for (Contact contact:allContacts) {
             if (contact.getContactID() == id) {
@@ -340,4 +350,12 @@ public class CachedData {
     public ObservableList<LocalTime> getAppointmentTimes() {
         return appointmentTimes;
     }
+
+    private final ObservableList<String> reports = FXCollections.observableArrayList(
+            "Total Appointment Types By Month",
+            "Contact Schedules",
+            "Custom Report TBD"
+    );
+
+    public ObservableList<String> getReports() { return reports; }
 }

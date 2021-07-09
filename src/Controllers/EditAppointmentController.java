@@ -144,6 +144,7 @@ public class EditAppointmentController {
             cachedData.clearAppointments();
             cachedData.clearContacts();
             cachedData.clearCustomers();
+            AppointmentsController.setSelectedAppointment(null);
             try {
                 SchedulingApplication.switchScenes(Paths.appointmentsPath);
             } catch (IOException e) {

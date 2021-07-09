@@ -107,6 +107,7 @@ public class EditCustomerController {
             cachedData.clearCustomers();
             cachedData.clearCountries();
             cachedData.clearCountries();
+            CustomersController.setSelectedCustomer(null);
             try {
                 SchedulingApplication.switchScenes(Paths.customersPath);
             } catch (IOException e) {
@@ -117,6 +118,7 @@ public class EditCustomerController {
             cachedData.clearCustomers();
             cachedData.clearCountries();
             cachedData.clearDivisions();
+            CustomersController.setSelectedCustomer(null);
             try {
                 // TODO: add dialog for confirmation before cancelling
                 SchedulingApplication.switchScenes(Paths.customersPath);
