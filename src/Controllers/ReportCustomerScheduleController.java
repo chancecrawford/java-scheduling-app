@@ -3,73 +3,75 @@ package Controllers;
 import Data.Paths;
 import Main.SchedulingApplication;
 import Models.Appointment;
+import Models.Customer;
 import Utils.CachedData;
 import Utils.DateFormatter;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Map;
 
-public class ReportAppointmentTypeMonthController {
+public class ReportCustomerScheduleController {
     @FXML
     private Button appointmentsNavButton, customersNavButton, logoutButton;
     @FXML
     private ChoiceBox<String> reportsChoiceBox;
     @FXML
+    private ChoiceBox<Customer> customersChoiceBox;
+    @FXML
     private Label dateRangeLabel;
     @FXML
     private Button calendarPreviousButton, calendarNextButton;
     @FXML
-    private TableView<Map.Entry<String, Integer>> reportTableView;
+    private TableView<Appointment> reportTableView;
     @FXML
-    private TableColumn<Map.Entry<String, Integer>, String> appointmentTypeColumn;
-    @FXML
-    private TableColumn<Map.Entry<String, Integer>, Integer> typeTotalColumn;
+    private TableColumn<Appointment, String> appointmentTitleColumn, appointmentDateColumn, appointmentStartEndColumn;
 
     public static final CachedData cachedData = AppointmentsController.cachedData;
     private final Calendar calendar = Calendar.getInstance();
 
-    private final ObservableMap<String, Integer> apptTypeHashMap = FXCollections.observableHashMap();
+    private final ObservableList<Appointment> reportTableItems = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
+        cachedData.importCustomers();
         // set reports available in choicebox
         reportsChoiceBox.setItems(cachedData.getReports());
-        reportsChoiceBox.setValue("Total Appointment Types By Month");
-        setReportChoiceListener();
-        // set date and retrieve report data
+        reportsChoiceBox.setValue("Customer Schedules");
+        // set contacts choicebox
+        customersChoiceBox.setItems(cachedData.getAllCustomers());
+        // set contact to first in list
+        customersChoiceBox.setValue(customersChoiceBox.getItems().get(0));
+
         dateRangeLabel.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
+
         retrieveReportData();
         setReportColumns();
-        // set monthly and app navigation buttons
-        setCalendarNavigateButtonEvents();
+
+        // set listeners and events
+        setReportChoiceListener();
+        setCustomersChoiceListener();
         setNavigationButtonEvents();
+        setCalendarNavigateButtonEvents();
     }
 
     private void retrieveReportData() {
-        // clear hash map before grabbing new values
-        apptTypeHashMap.clear();
-        // get appointments for the month
-        ObservableList<Appointment> appointmentsForMonth = cachedData.getAppointmentsByMonth(DateFormatter.formatToSimpleDate(calendar.getTime(), "isoYearMonth"));
-        // iterate through appointment types
-        for (String type:cachedData.getAppointmentTypes()) {
-            // get total appointments of that type
-            int numberOfAppointments = cachedData.getAppointmentTotalByType(appointmentsForMonth, type);
-            // ensure result(s) are there before adding to hash map
-            if (numberOfAppointments > 0) {
-                apptTypeHashMap.put(type, numberOfAppointments);
-            }
-        }
-        // populate table with results
-        ObservableList<Map.Entry<String, Integer>> items = FXCollections.observableArrayList(apptTypeHashMap.entrySet());
-        reportTableView.setItems(items);
+        // clear table before populating with new data
+        reportTableItems.clear();
+        reportTableView.setItems(reportTableItems);
+        // populate table with selected contact data
+        reportTableItems.addAll(cachedData.getAppointmentsByCustomerForMonth(
+                DateFormatter.formatToSimpleDate(calendar.getTime(),
+                        "isoYearMonth"), customersChoiceBox.getValue().getCustID())
+        );
+        reportTableView.setItems(reportTableItems);
     }
 
     private void setNavigationButtonEvents() {
@@ -119,9 +121,11 @@ public class ReportAppointmentTypeMonthController {
             if (!newValue.equals(oldValue)) {
                 try {
                     if (newValue.equals("Total Appointment Types By Month")) {
+                        cachedData.clearCustomers();
                         SchedulingApplication.switchScenes(Paths.reportAppointmentTypeMonthPath);
                     }
                     if (newValue.equals("Contact Schedules")) {
+                        cachedData.clearCustomers();
                         SchedulingApplication.switchScenes(Paths.reportContactSchedulePath);
                     }
                     if (newValue.equals("Customer Schedules")) {
@@ -134,9 +138,18 @@ public class ReportAppointmentTypeMonthController {
         });
     }
 
+    private void setCustomersChoiceListener() {
+        customersChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.equals(oldValue)) {
+                retrieveReportData();
+            }
+        });
+    }
+
     private void setReportColumns() {
-        // lambda for better iteration and setting of values in columns
-        appointmentTypeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getKey()));
-        typeTotalColumn.setCellValueFactory(param -> new SimpleIntegerProperty(param.getValue().getValue()).asObject());
+        appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStart().format(DateTimeFormatter.ofPattern("MMM d"))));
+        appointmentStartEndColumn.setCellValueFactory(param -> Bindings.concat(param.getValue().getStart().format(DateTimeFormatter.ofPattern("hh:mm a")) + " - " +
+                param.getValue().getEnd().format(DateTimeFormatter.ofPattern("hh:mm a"))));
     }
 }

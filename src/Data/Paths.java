@@ -10,5 +10,5 @@ public class Paths {
     public static final String editCustomersPath = "../Views/EditCustomer.fxml";
     public static final String reportAppointmentTypeMonthPath = "../Views/ReportAppointmentTypeMonth.fxml";
     public static final String reportContactSchedulePath = "../Views/ReportContactSchedule.fxml";
-    public static final String customReportPath = "../Views/ReportTBD.fxml";
+    public static final String reportCustomerSchedulePath = "../Views/ReportCustomerSchedule.fxml";
 }

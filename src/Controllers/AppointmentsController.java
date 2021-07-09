@@ -128,7 +128,6 @@ public class AppointmentsController {
         });
         reportsNavButton.setOnAction(actionEvent -> {
             try {
-                cachedData.clearAppointments();
                 SchedulingApplication.switchScenes(Paths.reportAppointmentTypeMonthPath);
             } catch (IOException e) {
                 e.printStackTrace();

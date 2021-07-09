@@ -192,11 +192,34 @@ public class CachedData {
     }
 
     public ObservableList<Appointment> getAppointmentsByMonth(String date) {
-
         // Create an array of results that match the date
         ObservableList<Appointment> monthMatches = FXCollections.observableArrayList();
         for (Appointment appointment : getAllAppointments()) {
             if (appointment.getUserID() == SchedulingApplication.getUser().getId()
+                    && appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
+                monthMatches.add(appointment);
+            }
+        }
+        return monthMatches;
+    }
+
+    public ObservableList<Appointment> getAppointmentsByContactForMonth(String date, int contactID) {
+        // Create an array of results that match the date
+        ObservableList<Appointment> monthMatches = FXCollections.observableArrayList();
+        for (Appointment appointment : getAllAppointments()) {
+            if (appointment.getContactID() == contactID
+                    && appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
+                monthMatches.add(appointment);
+            }
+        }
+        return monthMatches;
+    }
+
+    public ObservableList<Appointment> getAppointmentsByCustomerForMonth(String date, int customerID) {
+        // Create an array of results that match the date
+        ObservableList<Appointment> monthMatches = FXCollections.observableArrayList();
+        for (Appointment appointment : getAllAppointments()) {
+            if (appointment.getCustomerID() == customerID
                     && appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
                 monthMatches.add(appointment);
             }
@@ -354,7 +377,7 @@ public class CachedData {
     private final ObservableList<String> reports = FXCollections.observableArrayList(
             "Total Appointment Types By Month",
             "Contact Schedules",
-            "Custom Report TBD"
+            "Customer Schedules"
     );
 
     public ObservableList<String> getReports() { return reports; }
