@@ -3,6 +3,7 @@ package Controllers;
 import Data.Paths;
 import Main.SchedulingApplication;
 import Models.Appointment;
+import Utils.Alerts;
 import Utils.CachedData;
 import Utils.Database;
 import Utils.DateFormatter;
@@ -16,7 +17,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class AppointmentsController {
     // view navigation
@@ -72,6 +77,10 @@ public class AppointmentsController {
         setAppointmentColumns();
         appointmentTableView.setItems(appointmentTableItems);
         cachedData.importAppointments();
+
+        // check if user has upcoming appointments
+        checkUpcomingAppointments();
+        // populate appointments for default date range
         populateAppointmentsTable();
         // set links and actions for buttons
         setNavigationButtonEvents();
@@ -80,6 +89,38 @@ public class AppointmentsController {
         setAppointmentEditingButtonEvents();
         // set listener to update appt table with appts for selected day
         setAppointmentTableListener();
+    }
+
+    private void checkUpcomingAppointments() {
+        // TODO: add checking for last scene so it'll only generate from login
+
+        // to hold appointments for alert if multiple
+        StringBuilder appointmentAlert = new StringBuilder();
+
+        for (Appointment appointment : cachedData.getAppointmentsByDate(DateFormatter.formatToSimpleDate(calendar.getTime(), "iso"))) {
+            // get minutes between this appointment and current time
+            long minutesBetween = ChronoUnit.MINUTES.between(LocalDateTime.now(), appointment.getStart());
+            // check if appointment is within 15 minutes
+            if (minutesBetween <= 15) {
+                appointmentAlert.append("ID: ")
+                        .append(appointment.getApptID())
+                        .append("\n")
+                        .append("Date: ")
+                        .append(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthDay"))
+                        .append("\n")
+                        .append("Time: ")
+                        .append(DateFormatter.formatLocalDateTime(appointment.getStart(), "simpleTime"))
+                        .append("\n").append("\n");
+            }
+        }
+        // generates alert and populates it with appointment messages if string builder isn't empty
+        if (appointmentAlert.length() > 0 || !appointmentAlert.toString().equals("")) {
+            Alerts.GenerateAlert("INFORMATION", "Upcoming Appointments", "You have upcoming appointments!", appointmentAlert.toString(), "ShowAndWait");
+        }
+        // generate alert if no upcoming appointments exist
+        if (appointmentAlert.length() == 0 || appointmentAlert.toString().equals("")) {
+            Alerts.GenerateAlert("INFORMATION", "Upcoming Appointments", "No upcoming appointments", "You have no upcoming appointments", "ShowAndWait");
+        }
     }
 
     private void populateAppointmentsTable() {

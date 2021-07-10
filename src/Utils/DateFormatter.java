@@ -38,6 +38,9 @@ public class DateFormatter {
             if (formatType.equals("iso")) {
                 return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
+            if (formatType.equals("simpleTime")) {
+                return date.format(DateTimeFormatter.ofPattern("hh:mm a"));
+            }
             if (formatType.equals("loggerTime")) {
                 return date.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             }

@@ -1,1 +1,4 @@
 /out/
+
+# for ignoring activity logger
+*.txt

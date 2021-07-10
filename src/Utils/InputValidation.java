@@ -84,9 +84,9 @@ public class InputValidation {
                 inputErrors.append(Text.appointmentEndNotAfterStartError).append("\n");
             }
             if (customerID != null) {
-                if (!isAppointmentInBusinessHours(localDate, start, end)) {
-                    inputErrors.append(Text.appointmentOutsideHoursError).append("\n");
-                }
+//                if (!isAppointmentInBusinessHours(localDate, start, end)) {
+//                    inputErrors.append(Text.appointmentOutsideHoursError).append("\n");
+//                }
                 if (doesAppointmentConflictExist(localDate, start, end, customerID, apptID)) {
                     inputErrors.append(Text.appointmentConflictError).append("\n");
                 }
