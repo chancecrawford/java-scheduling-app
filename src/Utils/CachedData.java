@@ -160,7 +160,7 @@ public class CachedData {
         ObservableList<Appointment> datesMatched = FXCollections.observableArrayList();
         for (Appointment appointment : getAllAppointments()) {
             if (appointment.getUserID() == SchedulingApplication.getUser().getId()
-                    && DateFormatter.formatToIsoDate(appointment.getStart()).equals(date)) {
+                    && DateFormatter.formatLocalDateTime(appointment.getStart(), "iso").equals(date)) {
                 datesMatched.add(appointment);
             }
         }
@@ -184,7 +184,7 @@ public class CachedData {
         for (Appointment appointment : getAllAppointments()) {
             if (appointment.getUserID() == SchedulingApplication.getUser().getId()
                     && appointment.getCustomerID() == customerID
-                    && DateFormatter.formatToIsoDate(appointment.getStart()).equals(date)) {
+                    && DateFormatter.formatLocalDateTime(appointment.getStart(), "iso").equals(date)) {
                 datesMatched.add(appointment);
             }
         }

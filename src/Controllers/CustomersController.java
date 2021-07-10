@@ -3,6 +3,7 @@ package Controllers;
 import Data.Paths;
 import Main.SchedulingApplication;
 import Models.Customer;
+import Utils.Alerts;
 import Utils.CachedData;
 import Utils.Database;
 import javafx.collections.FXCollections;
@@ -123,7 +124,7 @@ public class CustomersController {
                 // can't use Alerts class here due to needing to verify against user response from alert
                 Alert deleteCustomerWarning = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + selectedCustomer.getName() + "?", ButtonType.OK, ButtonType.CANCEL);
                 deleteCustomerWarning.showAndWait();
-                // after user confirms, delete part
+                // after user confirms, delete customer
                 if (deleteCustomerWarning.getResult() == ButtonType.OK) {
                     try {
                         PreparedStatement deleteCustomerStatement = Database.getDBConnection().prepareStatement("DELETE FROM customers WHERE Customer_ID = ?");
@@ -138,7 +139,15 @@ public class CustomersController {
                             System.out.println("----- Customer Deleted! -----");
                         }
                     } catch (SQLException throwables) {
-                        // TODO: generate error here to inform customer of customer to appt constraint
+                        if (cachedData.getAppointmentsByCustomerID(selectedCustomer.getCustID()).isEmpty()) {
+                            Alerts.GenerateAlert(
+                                    "WARNING",
+                                    "Delete Customer Error",
+                                    "Cannot Delete Customer",
+                                    "Cannot delete customer if they have appointments",
+                                    "ShowAndWait"
+                            );
+                        }
                         throwables.printStackTrace();
                     }
                 }

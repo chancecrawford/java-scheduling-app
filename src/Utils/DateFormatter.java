@@ -33,9 +33,14 @@ public class DateFormatter {
         return null;
     }
 
-    public static String formatToIsoDate(LocalDateTime date) {
+    public static String formatLocalDateTime(LocalDateTime date, String formatType) {
         if (date != null) {
-            return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            if (formatType.equals("iso")) {
+                return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+            if (formatType.equals("loggerTime")) {
+                return date.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            }
         }
         return null;
     }
