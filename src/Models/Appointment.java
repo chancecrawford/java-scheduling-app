@@ -2,6 +2,9 @@ package Models;
 
 import java.time.LocalDateTime;
 
+/**
+ * Class object for appointments. Allows for easier data population for cache.
+ */
 public class Appointment {
     private int apptID;
     private int userID;
@@ -16,6 +19,19 @@ public class Appointment {
     private LocalDateTime start;
     private LocalDateTime end;
 
+    /**
+     * Constructor for appointment object
+     * @param apptID
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param start
+     * @param end
+     * @param customerID
+     * @param userID
+     * @param contactID
+     */
     public Appointment (int apptID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.apptID = apptID;
         this.title = title;
@@ -29,8 +45,12 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+    /**
+     * Default constructor
+     */
     public Appointment() { }
 
+    // getters for appointment attributes
     public int getApptID() { return apptID; }
     public int getUserID() { return userID; }
     public int getCustomerID() { return customerID; }
@@ -41,7 +61,7 @@ public class Appointment {
     public String getType() { return type; }
     public LocalDateTime getStart() { return start; }
     public LocalDateTime getEnd() { return end; }
-
+    // setters for appointment attributes
     public void setApptID(int apptID) { this.apptID = apptID; }
     public void setUserID(int userID) { this.userID = userID; }
     public void setCustomerID(int customerID) { this.customerID = customerID; }

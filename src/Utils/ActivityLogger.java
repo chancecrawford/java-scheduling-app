@@ -1,22 +1,29 @@
 package Utils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.logging.*;
+import java.io.PrintWriter;
 
+/**
+ * This class is for logging user login activity to a text file in the project source directory.
+ */
 public class ActivityLogger {
-    static Handler fileHandler = null;
-    private static final Logger logger = Logger.getLogger(ActivityLogger.class.getName());
+//    private final Logger logger = Logger.getLogger(ActivityLogger.class.getName());
 
+    /**
+     * Takes in specified log message and creates a new login_activity.txt file if one doesn't already exist or
+     * appends to an existing one.
+     * @param logMessage retrieved to create/add to log file
+     */
     public static void log(String logMessage) {
         try {
-            fileHandler = new FileHandler("./login_activity.txt", true);
-            SimpleFormatter simpleFormatter = new SimpleFormatter();
-            fileHandler.setFormatter(simpleFormatter);
-            logger.addHandler((fileHandler));
-            logger.info(logMessage);
-        } catch (IOException e) {
-            logger.severe("----- User activity could not be logged! -----");
+            FileWriter fileWriter = new FileWriter("./login_activity", true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(logMessage);
+            bufferedWriter.newLine();
+            bufferedWriter.close();
+    } catch (IOException e) {
             e.printStackTrace();
         }
     }

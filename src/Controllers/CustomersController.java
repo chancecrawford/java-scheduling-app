@@ -102,14 +102,20 @@ public class CustomersController {
             }
         });
         logoutButton.setOnAction(actionEvent -> {
-            try {
-                // want to set user to null and clear cached data as security measure
-                SchedulingApplication.setUser(null);
-                cachedData.clearCache();
-                SchedulingApplication.switchScenes(Paths.mainLoginPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    // can't use Alerts class here due to needing to verify against user response from alert
+                    Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.OK, ButtonType.CANCEL);
+                    logoutAlert.showAndWait();
+                    // if user clicks ok, continue with navigation back to login view
+                    if (logoutAlert.getResult() == ButtonType.OK) {
+                        try {
+                            // want to set user to null and clear cached data as security measure
+                            SchedulingApplication.setUser(null);
+                            cachedData.clearCache();
+                            SchedulingApplication.switchScenes(Paths.mainLoginPath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
         });
     }
 
@@ -126,6 +132,7 @@ public class CustomersController {
             }
         });
         editButton.setOnAction(actionEvent -> {
+            System.out.println("Main Customer Selection: " + selectedCustomer.getCustID());
             try {
                 SchedulingApplication.switchScenes(Paths.editCustomersPath);
             } catch (IOException e) {
@@ -202,7 +209,7 @@ public class CustomersController {
         // used lambda for setting listeners on table view
         customerTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (customerTableView.getSelectionModel().getSelectedItem() != null) {
-                selectedCustomer = newValue;
+                setSelectedCustomer(newValue);
                 editButton.setDisable(false);
                 deleteButton.setDisable(false);
             }

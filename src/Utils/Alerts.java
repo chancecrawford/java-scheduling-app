@@ -3,7 +3,7 @@ package Utils;
 import javafx.scene.control.Alert;
 
 /**
- * Class used for generating simple alerts
+ * Class used for generating simple alerts used throughout application
  */
 public class Alerts {
     /**

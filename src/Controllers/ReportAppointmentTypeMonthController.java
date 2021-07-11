@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class ReportAppointmentTypeMonthController {
+    // javafx instantiation for ui elements
     @FXML
     private Button appointmentsNavButton, customersNavButton, logoutButton;
     @FXML
@@ -33,9 +34,11 @@ public class ReportAppointmentTypeMonthController {
     @FXML
     private TableColumn<Map.Entry<String, Integer>, Integer> typeTotalColumn;
 
+    // grab cached data from main appointments view
     public static final CachedData cachedData = AppointmentsController.cachedData;
+    // create calendar for grabbing date based data
     private final Calendar calendar = Calendar.getInstance();
-
+    // hash map to link relevant report data
     private final ObservableMap<String, Integer> apptTypeHashMap = FXCollections.observableHashMap();
 
     @FXML
@@ -55,6 +58,10 @@ public class ReportAppointmentTypeMonthController {
         SchedulingApplication.setLastScene("reports");
     }
 
+    /**
+     * Grabs list of appointments for current/selected month, iterates through list and totals appointment types, puts
+     * results in the hash map, then checks if any results were retrieved before populating table with results
+     */
     private void retrieveReportData() {
         // clear hash map before grabbing new values
         apptTypeHashMap.clear();
@@ -74,6 +81,9 @@ public class ReportAppointmentTypeMonthController {
         reportTableView.setItems(items);
     }
 
+    /**
+     * Sets actions to fire for nagivating between different pages (Appointments, Customers, and logout).
+     */
     private void setNavigationButtonEvents() {
         appointmentsNavButton.setOnAction(actionEvent -> {
             try {
@@ -92,23 +102,35 @@ public class ReportAppointmentTypeMonthController {
             }
         });
         logoutButton.setOnAction(actionEvent -> {
-            try {
-                // want to set user to null and clear cached data as security measure
-                SchedulingApplication.setUser(null);
-                cachedData.clearCache();
-                SchedulingApplication.switchScenes(Paths.mainLoginPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    // can't use Alerts class here due to needing to verify against user response from alert
+                    Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.OK, ButtonType.CANCEL);
+                    logoutAlert.showAndWait();
+                    // if user clicks ok, continue with navigation back to login view
+                    if (logoutAlert.getResult() == ButtonType.OK) {
+                        try {
+                            // want to set user to null and clear cached data as security measure
+                            SchedulingApplication.setUser(null);
+                            cachedData.clearCache();
+                            SchedulingApplication.switchScenes(Paths.mainLoginPath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
         });
     }
 
+    /**
+     * Sets actions for calendar navigation buttons. Previous button goes back one month or week depending on toggle
+     * selected. Next does the same but for one month or week forward.
+     */
     private void setCalendarNavigateButtonEvents() {
+        // moves calendar one week or month back then repopulates data
         calendarPreviousButton.setOnAction(actionEvent -> {
             calendar.add(Calendar.MONTH, -1);
             dateRangeLabel.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
             retrieveReportData();
         });
+        // moves calendar one week or month forward then repopulates data
         calendarNextButton.setOnAction(actionEvent -> {
             calendar.add(Calendar.MONTH, 1);
             dateRangeLabel.setText(DateFormatter.formatToSimpleDate(calendar.getTime(), "monthYear"));
@@ -116,7 +138,11 @@ public class ReportAppointmentTypeMonthController {
         });
     }
 
+    /**
+     * Changes view to selected report view after selection confirmed not to be null, based on user input
+     */
     private void setReportChoiceListener() {
+        // lambda used for better iteration for listener through objects
         reportsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
                 try {
@@ -136,9 +162,12 @@ public class ReportAppointmentTypeMonthController {
         });
     }
 
+    /**
+     * Sets columns to relevant data from report
+     */
     private void setReportColumns() {
         // lambda for better iteration and setting of values in columns
-        appointmentTypeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getKey()));
-        typeTotalColumn.setCellValueFactory(param -> new SimpleIntegerProperty(param.getValue().getValue()).asObject());
+        appointmentTypeColumn.setCellValueFactory(type -> new SimpleStringProperty(type.getValue().getKey()));
+        typeTotalColumn.setCellValueFactory(typeTotal -> new SimpleIntegerProperty(typeTotal.getValue().getValue()).asObject());
     }
 }

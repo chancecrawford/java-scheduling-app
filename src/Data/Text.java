@@ -1,5 +1,9 @@
 package Data;
 
+/**
+ * This class holds all the static text needed for generating error messages, labels, titles, etc in the application and
+ * provides a centralized source for easier maintenance for future developers.
+ */
 public class Text {
     // appointment error messages
     public static String appointmentTitleError = "Entry for appointment title is missing or invalid.";

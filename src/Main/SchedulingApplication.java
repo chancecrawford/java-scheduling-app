@@ -26,8 +26,8 @@ public class SchedulingApplication extends Application {
     /**
      * This function takes a scene path and switches the scene to said path and provides easier use and more readable
      * code for doing so
-     * @param scenePath
-     * @throws IOException
+     * @param scenePath provided path to change scene with
+     * @throws IOException in case scene can't be found or generated
      */
     public static void switchScenes(String scenePath) throws IOException {
         Parent newView = FXMLLoader.load(Objects.requireNonNull(SchedulingApplication.class.getResource(scenePath)));

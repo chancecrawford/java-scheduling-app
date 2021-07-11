@@ -73,8 +73,8 @@ public class AddAppointmentController {
             Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
             Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
 
-            // validate user inputs and appointment checks before moving forward; generate error message if any fields
-            // are invalid or if conflicts exist
+            // validate user inputs and appointment checks before moving forward;
+            // generate error message if any fields are invalid or if conflicts exist
             try {
                 if (InputValidation.areAppointmentInputsValid(
                         tempApptID,
@@ -93,7 +93,7 @@ public class AddAppointmentController {
                     // convert to UTC
                     LocalDateTime startUTC = (startLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
                     LocalDateTime endUTC = (endLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
-                    // craft save appointment query
+                    // create save appointment query
                     PreparedStatement saveApptStatement = Database.getDBConnection().prepareStatement("INSERT INTO appointments " +
                             "(Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -182,7 +182,10 @@ public class AddAppointmentController {
         });
     }
 
-    // formats LocalTime cells to display as 12hr time format
+    /**
+     * Formats LocalTime cells to display as 12hr time format. Lambda is used for iterating through list cells to perform
+     * updateItem function more efficiently.
+     */
     private void convertTimeSelectionCells() {
         startComboBox.setCellFactory(localTimeListView -> new ListCell<>() {
             public void updateItem(LocalTime time, boolean empty) {
@@ -211,7 +214,9 @@ public class AddAppointmentController {
             }
         });
     }
-    // callback to reformat combobox selection for start/end
+    /**
+     * Callback to reformat combobox selection for start/end
+     */
     Callback<ListView<LocalTime>, ListCell<LocalTime>> timesCellFactory = new Callback<>() {
         @Override
         public ListCell<LocalTime> call(ListView<LocalTime> l) {

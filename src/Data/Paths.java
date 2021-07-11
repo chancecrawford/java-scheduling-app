@@ -1,5 +1,9 @@
 package Data;
 
+/**
+ * This class holds all the static paths needed for navigating through the differents scenes in the application and
+ * provides a centralized source for easier maintenance for future developers.
+ */
 public class Paths {
     public static final String mainLoginPath = "../Views/MainLoginView.fxml";
     public static final String addAppointmentPath = "../Views/AddAppointment.fxml";

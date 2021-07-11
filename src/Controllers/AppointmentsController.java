@@ -178,14 +178,20 @@ public class AppointmentsController {
             }
         });
         logoutButton.setOnAction(actionEvent -> {
-            try {
-                // want to set user to null as security measure
-                SchedulingApplication.setUser(null);
-                cachedData.clearCache();
-                SchedulingApplication.switchScenes(Paths.mainLoginPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    // can't use Alerts class here due to needing to verify against user response from alert
+                    Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.OK, ButtonType.CANCEL);
+                    logoutAlert.showAndWait();
+                    // if user clicks ok, continue with navigation back to login view
+                    if (logoutAlert.getResult() == ButtonType.OK) {
+                        try {
+                            // want to set user to null as security measure
+                            SchedulingApplication.setUser(null);
+                            cachedData.clearCache();
+                            SchedulingApplication.switchScenes(Paths.mainLoginPath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
         });
     }
 
@@ -309,7 +315,7 @@ public class AppointmentsController {
         // used lambda for setting listener on table view selections
         appointmentTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (appointmentTableView.getSelectionModel().getSelectedItem() != null) {
-                selectedAppointment = newValue;
+                setSelectedAppointment(newValue);
                 editButton.setDisable(false);
                 deleteButton.setDisable(false);
             }
