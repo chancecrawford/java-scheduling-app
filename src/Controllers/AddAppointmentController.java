@@ -20,6 +20,7 @@ import java.time.*;
 import java.util.Date;
 
 public class AddAppointmentController {
+    // javafx instantiation for ui elements
     @FXML private TextField titleTextField, locationTextField;
     @FXML private ChoiceBox<String> typeChoiceBox;
     @FXML private ChoiceBox<Customer> customerChoiceBox;
@@ -30,6 +31,7 @@ public class AddAppointmentController {
     @FXML private Label businessHoursLabel;
     @FXML private Button addButton, cancelButton;
 
+    // grab cached data from main appointments view
     public static final CachedData cachedData = AppointmentsController.cachedData;
 
     @FXML
@@ -41,7 +43,7 @@ public class AddAppointmentController {
         typeChoiceBox.setItems(cachedData.getAppointmentTypes());
         customerChoiceBox.setItems(cachedData.getAllCustomers());
         contactChoiceBox.setItems(cachedData.getAllContacts());
-
+        // set date picker to todays date
         apptDatePicker.setValue(LocalDateTime.now().toLocalDate());
         disableDaysBeforeToday();
         // populate times from cached data
@@ -57,6 +59,12 @@ public class AddAppointmentController {
         setButtonActions();
     }
 
+    /**
+     * Grabs user inputs, validates inputs with {@link InputValidation#areAppointmentInputsValid}, which also checks if
+     * appointment date and times are within business hours and do not conflict with other customer appointments, before
+     * saving the new appointment to the database and local cache, and finally navigating the user back to the main
+     * appointments view with a success alert.
+     */
     private void setButtonActions() {
         addButton.setOnAction(actionEvent -> {
             // generate random appt id
@@ -65,6 +73,8 @@ public class AddAppointmentController {
             Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
             Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
 
+            // validate user inputs and appointment checks before moving forward; generate error message if any fields
+            // are invalid or if conflicts exist
             try {
                 if (InputValidation.areAppointmentInputsValid(
                         tempApptID,
@@ -83,10 +93,11 @@ public class AddAppointmentController {
                     // convert to UTC
                     LocalDateTime startUTC = (startLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
                     LocalDateTime endUTC = (endLDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
-
+                    // craft save appointment query
                     PreparedStatement saveApptStatement = Database.getDBConnection().prepareStatement("INSERT INTO appointments " +
                             "(Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    // set values from user inputs in query
                     saveApptStatement.setInt(1, tempApptID);
                     saveApptStatement.setString(2, titleTextField.getText().trim());
                     saveApptStatement.setString(3, descriptionTextArea.getText());
@@ -98,7 +109,7 @@ public class AddAppointmentController {
                     saveApptStatement.setInt(9, SchedulingApplication.getUser().getId());
                     saveApptStatement.setInt(10, contactID);
 
-                    //check if appt saved or not
+                    //check if appointment saved or not
                     int saveResult = saveApptStatement.executeUpdate();
                     if (saveResult == 1) {
                         // add new appointment to cached data since save confirmed
@@ -114,17 +125,25 @@ public class AddAppointmentController {
                                 SchedulingApplication.getUser().getId(),
                                 contactID
                         ));
-                        // TODO: generate alert then close back to application scene after user closes alert
-                        System.out.println("----- Appointment Saved! -----");
+                        // generate success alert for user
+                        Alerts.GenerateAlert(
+                                "INFORMATION",
+                                "Appointment Added",
+                                "Appointment Added",
+                                "Appointment has been successfully added.",
+                                "ShowAndWait"
+                        );
                     }
                 }
             } catch (ParseException | SQLException e) {
                 e.printStackTrace();
                 Alerts.GenerateAlert("ERROR", "Appointment Save Error", "Appointment Save Error", "Appointment could not be saved!", "ShowAndWait");
             }
+            // clear data so updated data can repopulate appointments table
             cachedData.clearAppointments();
             cachedData.clearContacts();
             cachedData.clearCustomers();
+            // navigate user back to main appointments view
             try {
                 SchedulingApplication.switchScenes(Paths.appointmentsPath);
             } catch (IOException e) {
@@ -132,19 +151,27 @@ public class AddAppointmentController {
             }
         });
         cancelButton.setOnAction(actionEvent -> {
-                // clear these from cache since we won't need it in main appt screen
+            // can't use Alerts class here due to needing to verify against user response from alert
+            Alert cancelConfirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel?", ButtonType.OK, ButtonType.CANCEL);
+            cancelConfirmAlert.showAndWait();
+            // if user clicks ok, continue with navigation back to main appointments view
+            if (cancelConfirmAlert.getResult() == ButtonType.OK) {
+                // clear these from cache for fresh data pull in main appointments view
                 cachedData.clearAppointments();
                 cachedData.clearContacts();
                 cachedData.clearCustomers();
-            try {
-                // TODO: add dialog for confirmation before cancelling
-                SchedulingApplication.switchScenes(Paths.appointmentsPath);
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    SchedulingApplication.switchScenes(Paths.appointmentsPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
+    /**
+     * Disables days in date picker before current date as an extra layer of validation for appointments.
+     */
     private void disableDaysBeforeToday() {
         apptDatePicker.setDayCellFactory(datePicker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
@@ -162,11 +189,8 @@ public class AddAppointmentController {
                 super.updateItem(time, empty);
                 if (time != null) {
                     try {
-                        // clean this up and probs add it to DateFormatter
-                        SimpleDateFormat _24Format = new SimpleDateFormat("HH:mm");
-                        SimpleDateFormat _12Format = new SimpleDateFormat("hh:mm a");
-                        Date _24Date = _24Format.parse(time.toString());
-                        setText(_12Format.format(_24Date));
+                        // convert time to am/pm format
+                        setText(convertTimeToAMPM(time));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -178,11 +202,8 @@ public class AddAppointmentController {
                 super.updateItem(time, empty);
                 if (time != null) {
                     try {
-                        // clean this up and probs add it to DateFormatter
-                        SimpleDateFormat _24Format = new SimpleDateFormat("HH:mm");
-                        SimpleDateFormat _12Format = new SimpleDateFormat("hh:mm a");
-                        Date _24Date = _24Format.parse(time.toString());
-                        setText(_12Format.format(_24Date));
+                        // convert time to am/pm format
+                        setText(convertTimeToAMPM(time));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -200,11 +221,8 @@ public class AddAppointmentController {
                     super.updateItem(time, empty);
                     if (time != null) {
                         try {
-                            // clean this up and probs add it to DateFormatter
-                            SimpleDateFormat _24Format = new SimpleDateFormat("HH:mm");
-                            SimpleDateFormat _12Format = new SimpleDateFormat("hh:mm a");
-                            Date _24Date = _24Format.parse(time.toString());
-                            setText(_12Format.format(_24Date));
+                            // convert time to am/pm format
+                            setText(convertTimeToAMPM(time));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -213,4 +231,16 @@ public class AddAppointmentController {
             };
         }
     };
+
+    /**
+     * This converts the LocalTime object selected in the start/end combo boxes to 12hr am/pm formats for better
+     * readability for the user.
+     * @param time time selection from start/end combo boxes
+     * @return time formatted to 12hr am/pm format
+     * @throws ParseException in case LocalTime object can't be converted to new format
+     */
+    public static String convertTimeToAMPM(LocalTime time) throws ParseException {
+        Date temp24hrDate = new SimpleDateFormat("HH:mm").parse(time.toString());
+        return new SimpleDateFormat("hh:mm a").format(temp24hrDate);
+    }
 }

@@ -51,6 +51,8 @@ public class ReportAppointmentTypeMonthController {
         // set monthly and app navigation buttons
         setCalendarNavigateButtonEvents();
         setNavigationButtonEvents();
+        // for tracking to show upcoming appointment alert
+        SchedulingApplication.setLastScene("reports");
     }
 
     private void retrieveReportData() {

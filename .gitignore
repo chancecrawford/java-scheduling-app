@@ -2,3 +2,4 @@
 
 # for ignoring activity logger
 *.txt
+*.txt.lck

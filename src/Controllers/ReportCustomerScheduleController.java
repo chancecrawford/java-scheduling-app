@@ -140,7 +140,7 @@ public class ReportCustomerScheduleController {
 
     private void setCustomersChoiceListener() {
         customersChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
+            if (customersChoiceBox.getSelectionModel().getSelectedItem() != null && !newValue.equals(oldValue)) {
                 retrieveReportData();
             }
         });

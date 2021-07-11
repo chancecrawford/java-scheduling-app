@@ -11,19 +11,24 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.ZoneId;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Creates initial scene/stage and loads main form
+ * Creates initial scene/stage and loads main login form
  */
 public class SchedulingApplication extends Application {
-
+    // for tracking stage to switch scenes
     public static Stage currentStage;
-
+    public static String lastScene;
+    // for referencing throughout use of application
     private static User user;
 
+    /**
+     * This function takes a scene path and switches the scene to said path and provides easier use and more readable
+     * code for doing so
+     * @param scenePath
+     * @throws IOException
+     */
     public static void switchScenes(String scenePath) throws IOException {
         Parent newView = FXMLLoader.load(Objects.requireNonNull(SchedulingApplication.class.getResource(scenePath)));
         Scene newScene = new Scene(newView);
@@ -34,10 +39,6 @@ public class SchedulingApplication extends Application {
 
     public static void main(String[] args) {
         Database.dbConnect();
-
-        System.out.println("Time Zone: " + ZoneId.systemDefault());
-        System.out.println("Language: " + Locale.getDefault());
-
         launch(args);
     }
 
@@ -50,7 +51,10 @@ public class SchedulingApplication extends Application {
         primaryStage.show();
     }
 
+    // getters and setters for scene switching and user tracking
     public static Stage getCurrentStage() { return currentStage; }
+    public static String getLastScene() { return lastScene; }
+    public static void setLastScene(String scene) { lastScene = scene; }
     public static User getUser() { return user; }
     public static void setUser(User user) { SchedulingApplication.user = user; }
 }

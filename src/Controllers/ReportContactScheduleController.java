@@ -140,7 +140,7 @@ public class ReportContactScheduleController {
 
     private void setContactsChoiceListener() {
         contactsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
+            if (contactsChoiceBox.getSelectionModel().getSelectedItem() != null && !newValue.equals(oldValue)) {
                 retrieveReportData();
             }
         });

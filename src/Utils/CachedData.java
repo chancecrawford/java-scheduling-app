@@ -170,8 +170,7 @@ public class CachedData {
     public ObservableList<Appointment> getAppointmentsByCustomerID(int customerID) {
         ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
         for (Appointment appointment: getAllAppointments()) {
-            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
-                && customerID == appointment.getCustomerID()) {
+            if (customerID == appointment.getCustomerID()) {
                 customerAppointments.add(appointment);
             }
         }
