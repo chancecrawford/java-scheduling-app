@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Edit customer view that loads the selected customer from the main customers page and populates all inputs
+ * for that selected customer. Once the user hits save, all inputs are run through validation and any updates saved
+ * for that customer.
+ */
 public class EditCustomerController {
     // javafx instantiation for ui elements
     @FXML
@@ -34,6 +39,9 @@ public class EditCustomerController {
     // get selected customer from main customers view
     private final Customer selectedCustomer = CustomersController.getSelectedCustomer();
 
+    /**
+     * Initializes and populates all inputs with selected customer information. Set actions for all buttons and listeners.
+     */
     @FXML
     private void initialize() {
         // import needed data
@@ -89,6 +97,7 @@ public class EditCustomerController {
                 if (InputValidation.areCustomerInputsValid(
                         nameTextField.getText().trim(),
                         addressTextField.getText().trim(),
+                        cityTextField.getText().trim(),
                         divisionID,
                         countryID,
                         postalCodeTextField.getText().trim(),
@@ -96,7 +105,7 @@ public class EditCustomerController {
                 )) {
                     // create update customer query
                     PreparedStatement updateCustomerStatement = Database.getDBConnection().prepareStatement("UPDATE customers " +
-                            "SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ?)" +
+                            "SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? " +
                             "WHERE Customer_ID = ?");
                     // set user inputs into update query
                     updateCustomerStatement.setString(1, nameTextField.getText().trim());
@@ -116,6 +125,14 @@ public class EditCustomerController {
                         selectedCustomer.setPhoneNum(phoneTextField.getText().trim());
                         selectedCustomer.setDivisionID(divisionID);
                     }
+                    // clear data so updated data can repopulate customers table
+                    cachedData.clearCustomers();
+                    cachedData.clearCountries();
+                    cachedData.clearCountries();
+                    // reset customer selection
+                    CustomersController.setSelectedCustomer(null);
+                    // navigate back to main customers view
+                    SchedulingApplication.switchScenes(Paths.customersPath);
                     // generate success alert for user
                     Alerts.GenerateAlert(
                             "INFORMATION",
@@ -125,20 +142,8 @@ public class EditCustomerController {
                             "ShowAndWait"
                     );
                 }
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 throwables.printStackTrace();
-            }
-            // clear data so updated data can repopulate customers table
-            cachedData.clearCustomers();
-            cachedData.clearCountries();
-            cachedData.clearCountries();
-            // reset customer selection
-            CustomersController.setSelectedCustomer(null);
-            // navigate back to main customers view
-            try {
-                SchedulingApplication.switchScenes(Paths.customersPath);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
         cancelButton.setOnAction(actionEvent -> {
@@ -174,7 +179,8 @@ public class EditCustomerController {
 
     /**
      * Prevents special characters from being input in the postal code text field and only allows numerics and hyphens
-     * to be entered into the phone number text field.
+     * to be entered into the phone number text field. Lambdas used for better iteration through chars in field for
+     * validation/input sanitation
      */
     private void preventNonNumerics() {
         // lambdas for better iteration through chars in field for validation/input sanitation
@@ -194,7 +200,8 @@ public class EditCustomerController {
     }
 
     /**
-     * Filters and populates the division choice box based on country selected in country choice box
+     * Filters and populates the division choice box based on country selected in country choice box. Lambda used for
+     * iteration through country list items to perform function to get relevant divisions for divisions choice box.
      */
     private void setDivisionListener() {
         // used lambda for setting listeners on table view

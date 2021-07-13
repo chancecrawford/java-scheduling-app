@@ -7,7 +7,7 @@ application and supports English/French locale on the login page.
 ## Project Information
 Author: Chance Crawford
 Contact Info:
-Student Application Version:
+Student Application Version: 1.0
 Date:
 
 IDE: IntelliJ IDEA 2021.1.3 (Community Edition)

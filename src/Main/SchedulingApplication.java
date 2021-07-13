@@ -37,11 +37,20 @@ public class SchedulingApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Creates database connection and launches application
+     * @param args
+     */
     public static void main(String[] args) {
         Database.dbConnect();
         launch(args);
     }
 
+    /**
+     * Loads initial scene
+     * @param primaryStage
+     * @throws IOException
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(Paths.mainLoginPath)));
@@ -52,9 +61,34 @@ public class SchedulingApplication extends Application {
     }
 
     // getters and setters for scene switching and user tracking
+
+    /**
+     * Gets current stage for switching scenes through application
+     * @return current stage
+     */
     public static Stage getCurrentStage() { return currentStage; }
+
+    /**
+     * Gets last scene to check if appointment alert needs to be thrown upon loading of main appointments view
+     * @return last scene set
+     */
     public static String getLastScene() { return lastScene; }
+
+    /**
+     * Sets last scene for checking on main appointments view
+     * @param scene sets to current scene
+     */
     public static void setLastScene(String scene) { lastScene = scene; }
+
+    /**
+     * Gets currently logged in user
+     * @return logged in user
+     */
     public static User getUser() { return user; }
+
+    /**
+     * Sets user upon successful user login
+     * @param user sets new logged in user
+     */
     public static void setUser(User user) { SchedulingApplication.user = user; }
 }

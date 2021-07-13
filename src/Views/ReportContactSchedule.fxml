@@ -16,8 +16,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ReportContactScheduleController">
-    <VBox prefHeight="400.0" prefWidth="600.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ReportContactScheduleController">
+    <VBox prefHeight="400.0" prefWidth="764.0">
         <ButtonBar id="navigation-menu" prefHeight="60.0" prefWidth="600.0">
             <buttons>
                 <Button fx:id="appointmentsNavButton" mnemonicParsing="false" text="Appointments">
@@ -88,9 +88,13 @@
                 </BorderPane>
                 <TableView fx:id="reportTableView" prefHeight="188.0" prefWidth="400.0">
                     <columns>
-                        <TableColumn fx:id="appointmentTitleColumn" prefWidth="218.0" text="Appointment" />
-                        <TableColumn fx:id="appointmentDateColumn" minWidth="6.0" prefWidth="142.0" text="Date" />
-                        <TableColumn fx:id="appointmentStartEndColumn" prefWidth="219.0" text="Time" />
+                  <TableColumn fx:id="appointmentIDColumn" prefWidth="58.0" text="ID" />
+                        <TableColumn fx:id="appointmentTitleColumn" prefWidth="101.0" text="Title" />
+                  <TableColumn fx:id="appointmentTypeColumn" prefWidth="85.0" text="Type" />
+                        <TableColumn fx:id="appointmentDateColumn" minWidth="6.0" prefWidth="120.0" text="Date" />
+                        <TableColumn fx:id="appointmentStartEndColumn" prefWidth="126.0" text="Time" />
+                  <TableColumn fx:id="appointmentCustomerIDColumn" prefWidth="58.0" text="Cust ID" />
+                  <TableColumn fx:id="appointmentDescriptionColumn" prefWidth="195.0" text="Description" />
                     </columns>
                     <VBox.margin>
                         <Insets bottom="10.0" />

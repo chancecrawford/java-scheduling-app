@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Controller dedicated to generating the add customer scene, allowing input from user for new customers, running
+ * user inputs through input validation, and saving the new customer to the database and local cache before navigating
+ * the user back to the main customers view.
+ */
 public class AddCustomerController {
     // javafx instantiation for ui elements
     @FXML
@@ -30,6 +35,9 @@ public class AddCustomerController {
     // grab cache from main customers view
     public static final CachedData cachedData = CustomersController.cachedData;
 
+    /**
+     * Initializes and populates all ui elements with needed data for user to add customer information.
+     */
     @FXML
     private void initialize() {
         // import needed data
@@ -63,6 +71,7 @@ public class AddCustomerController {
                 if (InputValidation.areCustomerInputsValid(
                         nameTextField.getText().trim(),
                         addressTextField.getText().trim(),
+                        cityTextField.getText().trim(),
                         divisionID,
                         countryID,
                         postalCodeTextField.getText().trim(),
@@ -93,6 +102,14 @@ public class AddCustomerController {
                                 divisionID
                         ));
                     }
+                    // clear data so updated data can repopulate customers table
+                    cachedData.clearCustomers();
+                    cachedData.clearCountries();
+                    cachedData.clearCountries();
+                    // reset customer selection
+                    CustomersController.setSelectedCustomer(null);
+                    // navigate back to main customers view
+                    SchedulingApplication.switchScenes(Paths.customersPath);
                     // generate success alert for user
                     Alerts.GenerateAlert(
                             "INFORMATION",
@@ -102,18 +119,8 @@ public class AddCustomerController {
                             "ShowAndWait"
                     );
                 }
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 throwables.printStackTrace();
-            }
-            // clear data so updated data can repopulate customers table
-            cachedData.clearCustomers();
-            cachedData.clearCountries();
-            cachedData.clearCountries();
-            // navigate back to main customers view
-            try {
-                SchedulingApplication.switchScenes(Paths.customersPath);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
         cancelButton.setOnAction(actionEvent -> {
@@ -148,7 +155,8 @@ public class AddCustomerController {
 
     /**
      * Prevents special characters from being input in the postal code text field and only allows numerics and hyphens
-     * to be entered into the phone number text field.
+     * to be entered into the phone number text field. Lambdas used on each text field for better iterating through
+     * characters to perform regex sanitation on.
      */
     private void preventNonNumerics() {
         // lambdas for better iteration through chars in field for validation/input sanitation
@@ -168,10 +176,11 @@ public class AddCustomerController {
     }
 
     /**
-     * Filters and populates the division choice box based on country selected in country choice box
+     * Filters and populates the division choice box based on country selected in country choice box. Uses lambda for
+     * better iteration through choice box options to perform function on.
      */
     private void setDivisionListener() {
-        // used lambda for setting listeners on table view
+        // used lambda for setting listener country choice box
         countryChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (countryChoiceBox.getSelectionModel().getSelectedItem() != null) {
                 // iterate through list and get divisions

@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
+/**
+ * Report view that generates the report for customer schedules and handles selection/navigation to other types of reports.
+ */
 public class ReportCustomerScheduleController {
     // javafx instantiation for ui elements
     @FXML
@@ -42,6 +45,9 @@ public class ReportCustomerScheduleController {
     // list to hold retrieved data for report
     private final ObservableList<Appointment> reportTableItems = FXCollections.observableArrayList();
 
+    /**
+     * Initializes all ui elements, retrieves the needed data for the report, and populates the table view with the results.
+     */
     @FXML
     private void initialize() {
         // get needed data for report
@@ -140,10 +146,10 @@ public class ReportCustomerScheduleController {
     }
 
     /**
-     * Changes view to selected report view after selection confirmed not to be null, based on user input
+     * Changes view to selected report view after selection confirmed not to be null, based on user input. Uses lambda
+     * for better iteration through choice box elements to perform view switching.
      */
     private void setReportChoiceListener() {
-        // lambda used for better iteration for listener through objects
         reportsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
                 try {
@@ -166,7 +172,8 @@ public class ReportCustomerScheduleController {
     }
 
     /**
-     * Ensures selection is made before repopulating report table with data based on selected customer
+     * Ensures selection is made before repopulating report table with data based on selected contact. Uses lambda for
+     * better iteration through customers objects to perform report generation function call with.
      */
     private void setCustomersChoiceListener() {
         // lambda for better iteration through customer objects for listener
@@ -178,7 +185,8 @@ public class ReportCustomerScheduleController {
     }
 
     /**
-     * Sets columns to relevant data from report
+     * Sets columns to relevant data from report. Uses lambda for date and start/end columns to more efficiently set
+     * values from generated report.
      */
     private void setReportColumns() {
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));

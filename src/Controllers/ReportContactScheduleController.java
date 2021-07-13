@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
+/**
+ * Report view that generates the report for contact schedules and handles selection/navigation to other types of reports.
+ */
 public class ReportContactScheduleController {
     // javafx instantiation for ui elements
     @FXML
@@ -33,7 +36,14 @@ public class ReportContactScheduleController {
     @FXML
     private TableView<Appointment> reportTableView;
     @FXML
-    private TableColumn<Appointment, String> appointmentTitleColumn, appointmentDateColumn, appointmentStartEndColumn;
+    private TableColumn<Appointment, String>
+            appointmentIDColumn,
+            appointmentTitleColumn,
+            appointmentTypeColumn,
+            appointmentDateColumn,
+            appointmentStartEndColumn,
+            appointmentCustomerIDColumn,
+            appointmentDescriptionColumn;
 
     // grab cached data from main appointments view
     public static final CachedData cachedData = AppointmentsController.cachedData;
@@ -42,6 +52,9 @@ public class ReportContactScheduleController {
     // list to hold retrieved data for report
     private final ObservableList<Appointment> reportTableItems = FXCollections.observableArrayList();
 
+    /**
+     * Initializes all ui elements, retrieves the needed data for the report, and populates the table view with the results.
+     */
     @FXML
     private void initialize() {
         cachedData.importContacts();
@@ -139,10 +152,10 @@ public class ReportContactScheduleController {
     }
 
     /**
-     * Changes view to selected report view after selection confirmed not to be null, based on user input
+     * Changes view to selected report view after selection confirmed not to be null, based on user input. Uses lambda
+     * for better iteration through choice box elements to perform view switching.
      */
     private void setReportChoiceListener() {
-        // lambda used for better iteration for listener through objects
         reportsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
                 try {
@@ -165,7 +178,8 @@ public class ReportContactScheduleController {
     }
 
     /**
-     * Ensures selection is made before repopulating report table with data based on selected contact
+     * Ensures selection is made before repopulating report table with data based on selected contact. Uses lambda for
+     * better iteration through contacts objects to perform report generation function call with.
      */
     private void setContactsChoiceListener() {
         // lambda for better iteration through contact objects for listener
@@ -177,13 +191,18 @@ public class ReportContactScheduleController {
     }
 
     /**
-     * Sets columns to relevant data from report
+     * Sets columns to relevant data from report. Uses lambda for date and start/end columns to more efficiently set
+     * values from generated report.
      */
     private void setReportColumns() {
+        appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         // lambdas for iterating through items and using formatters to properly display values
         appointmentDateColumn.setCellValueFactory(date -> new SimpleStringProperty(date.getValue().getStart().format(DateTimeFormatter.ofPattern("MMM d"))));
         appointmentStartEndColumn.setCellValueFactory(times -> Bindings.concat(times.getValue().getStart().format(DateTimeFormatter.ofPattern("hh:mm a")) + " - " +
                 times.getValue().getEnd().format(DateTimeFormatter.ofPattern("hh:mm a"))));
+        appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 }

@@ -5,6 +5,7 @@ import Main.SchedulingApplication;
 import Models.Appointment;
 import Models.Contact;
 import Models.Customer;
+import Models.User;
 import Utils.Alerts;
 import Utils.CachedData;
 import Utils.Database;
@@ -25,6 +26,11 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Edit appointment view that loads the selected appointment from the main appointments page and populates all inputs
+ * for that selected appointment. Once the user hits save, all inputs are run through validation and any updates saved
+ * for that appointment.
+ */
 public class EditAppointmentController {
     // javafx instantiation for ui elements
     @FXML
@@ -32,6 +38,7 @@ public class EditAppointmentController {
     @FXML private ChoiceBox<String> typeChoiceBox;
     @FXML private ChoiceBox<Customer> customerChoiceBox;
     @FXML private ChoiceBox<Contact> contactChoiceBox;
+    @FXML private ChoiceBox<User> userChoiceBox;
     @FXML private TextArea descriptionTextArea;
     @FXML private DatePicker apptDatePicker;
     @FXML private ComboBox<LocalTime> startComboBox, endComboBox;
@@ -43,11 +50,15 @@ public class EditAppointmentController {
     // get selected user to edit from main appointments view
     private final Appointment selectedAppointment = AppointmentsController.getSelectedAppointment();
 
+    /**
+     * Initializes and populates all inputs with selected appointment information. Set actions for all buttons and listeners.
+     */
     @FXML
     private void initialize() {
         // import needed data
         cachedData.importContacts();
         cachedData.importCustomers();
+        cachedData.importUsers();
         // set data and display values
         apptIDLabel.setText(String.valueOf(selectedAppointment.getApptID()));
         // appt title
@@ -63,6 +74,9 @@ public class EditAppointmentController {
         // contact selection
         contactChoiceBox.setItems(cachedData.getAllContacts());
         contactChoiceBox.setValue(cachedData.getContactByID(selectedAppointment.getContactID()));
+        // user selection
+        userChoiceBox.setItems(cachedData.getAllUsers());
+        userChoiceBox.setValue(cachedData.getUserByID(selectedAppointment.getUserID()));
         // appt location
         locationTextField.setText(selectedAppointment.getLocation());
         // set date from selected appt
@@ -94,6 +108,7 @@ public class EditAppointmentController {
             // make sure there is a selection for these dropdowns before passing to validation func
             Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
             Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
+            Integer userID = !userChoiceBox.getSelectionModel().isEmpty() ? userChoiceBox.getSelectionModel().getSelectedItem().getId() : null;
 
             // validate user inputs and appointment checks before moving forward;
             // generate error message if any fields are invalid or if conflicts exist
@@ -104,6 +119,7 @@ public class EditAppointmentController {
                         typeChoiceBox.getSelectionModel().getSelectedItem(),
                         customerID,
                         contactID,
+                        userID,
                         locationTextField.getText(),
                         apptDatePicker.getValue(),
                         startComboBox.getSelectionModel().getSelectedItem(),
@@ -127,7 +143,7 @@ public class EditAppointmentController {
                     saveApptStatement.setTimestamp(5, Timestamp.valueOf(startUTC));
                     saveApptStatement.setTimestamp(6, Timestamp.valueOf(endUTC));
                     saveApptStatement.setInt(7, customerID);
-                    saveApptStatement.setInt(8, SchedulingApplication.getUser().getId());
+                    saveApptStatement.setInt(8, userID);
                     saveApptStatement.setInt(9, contactID);
                     saveApptStatement.setInt(10, selectedAppointment.getApptID());
 
@@ -142,8 +158,18 @@ public class EditAppointmentController {
                         selectedAppointment.setStart(startLDT);
                         selectedAppointment.setEnd(endLDT);
                         selectedAppointment.setCustomerID(customerID);
-                        selectedAppointment.setUserID(SchedulingApplication.getUser().getId());
+                        selectedAppointment.setUserID(userID);
                         selectedAppointment.setContactID(contactID);
+
+                        // clear data for main appt table to repopulate with fresh data
+                        cachedData.clearAppointments();
+                        cachedData.clearContacts();
+                        cachedData.clearCustomers();
+                        cachedData.clearUsers();
+                        // reset appointment selected
+                        AppointmentsController.setSelectedAppointment(null);
+                        // navigate back to main appointments view
+                        SchedulingApplication.switchScenes(Paths.appointmentsPath);
                         // generate success alert for user
                         Alerts.GenerateAlert(
                                 "INFORMATION",
@@ -154,7 +180,7 @@ public class EditAppointmentController {
                         );
                     }
                 }
-            } catch (ParseException | SQLException e) {
+            } catch (ParseException | SQLException | IOException e) {
                 e.printStackTrace();
                 Alerts.GenerateAlert(
                         "ERROR",
@@ -163,18 +189,6 @@ public class EditAppointmentController {
                         "Appointment could not be updated!",
                         "ShowAndWait"
                 );
-            }
-            // clear data for main appt table to repopulate with fresh data
-            cachedData.clearAppointments();
-            cachedData.clearContacts();
-            cachedData.clearCustomers();
-            // reset appointment selected
-            AppointmentsController.setSelectedAppointment(null);
-            // navigate back to main appointments view
-            try {
-                SchedulingApplication.switchScenes(Paths.appointmentsPath);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
         cancelButton.setOnAction(actionEvent -> {
@@ -198,7 +212,8 @@ public class EditAppointmentController {
     }
 
     /**
-     * Disables days in date picker before current date as an extra layer of validation for appointments.
+     * Disables days in date picker before current date as an extra layer of validation for appointments. Uses lambda
+     *      * for better iteration through cells with updateItem function to disable.
      */
     private void disableDaysBeforeToday() {
         apptDatePicker.setDayCellFactory(datePicker -> new DateCell() {
@@ -243,7 +258,8 @@ public class EditAppointmentController {
         });
     }
     /**
-     * Callback to reformat combobox selection for start/end
+     * Callback to reformat combobox selection for start/end. Does NOT use lambda for iteration since only single object
+     *      * that we need to convert.
      */
     Callback<ListView<LocalTime>, ListCell<LocalTime>> timesCellFactory = new Callback<>() {
         @Override

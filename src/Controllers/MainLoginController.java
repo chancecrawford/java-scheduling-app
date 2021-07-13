@@ -18,6 +18,11 @@ import java.time.ZoneOffset;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Initial view on startup that allows a user to enter login information, validates the inputs, and grabs the relevant
+ * user info if successful. Also logs user login attempts, whether successful or not, and outputs the info to a file in
+ * the project root.
+ */
 public class MainLoginController {
     // javafx instantiation for ui elements
     @FXML
@@ -37,6 +42,9 @@ public class MainLoginController {
     // grabs resource bundle for users locale to use on login page
     private static final ResourceBundle resBundle = ResourceBundle.getBundle("Locale/Login", Locale.forLanguageTag(Locale.getDefault().getCountry()));
 
+    /**
+     * Initializes and sets locale text in view and sets login actions and validation on login button.
+     */
     @FXML
     private void initialize() {
         // set text based on user locale

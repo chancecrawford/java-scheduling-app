@@ -10,6 +10,7 @@ public class Text {
     public static String appointmentTypeError = "Invalid or no selection made for appointment type.";
     public static String appointmentCustomerError = "Invalid or no selection made for a customer.";
     public static String appointmentContactError = "Invalid or no selection made for a contact.";
+    public static String appointmentUserError = "Invalid or no selection made for a user";
     public static String appointmentLocationError = "Entry for appointment location is missing or invalid.";
     public static String appointmentNullDateError = "An appointment date was not selected.";
     public static String appointmentPriorDateError = "Previous dates cannot be selected for an appointment.";

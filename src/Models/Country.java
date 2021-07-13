@@ -23,7 +23,16 @@ public class Country {
     public Country() { }
 
     // getters only for country
+    /**
+     * Gets requested country id
+     * @return country id
+     */
     public int getId() { return id; }
+
+    /**
+     * Gets requested country name
+     * @return country name
+     */
     public String getName() { return name; }
 
     /**

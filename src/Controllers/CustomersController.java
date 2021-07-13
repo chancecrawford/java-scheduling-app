@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Main customers view that contains navigation buttons to other important views, a list of customers to be viewed,
+ * and which can be selected by a user to by modified or deleted. Users can also navigate to add customers from here.
+ */
 public class CustomersController {
     // javafx instantiation for ui elements
     @FXML
@@ -48,6 +52,9 @@ public class CustomersController {
     // want this public for referencing in add/edit views
     public static final CachedData cachedData = new CachedData();
 
+    /**
+     * Initializes and populates customer list, sets actions for all buttons.
+     */
     @FXML
     private void initialize() {
         setCustomerColumns();
@@ -132,7 +139,6 @@ public class CustomersController {
             }
         });
         editButton.setOnAction(actionEvent -> {
-            System.out.println("Main Customer Selection: " + selectedCustomer.getCustID());
             try {
                 SchedulingApplication.switchScenes(Paths.editCustomersPath);
             } catch (IOException e) {
@@ -166,8 +172,6 @@ public class CustomersController {
                             if (deleteResult == 1) {
                                 // delete customer from local cache
                                 cachedData.deleteCustomer(selectedCustomer);
-                                // unselect customer from table
-                                customerTableView.getSelectionModel().select(null);
                                 // grab updated data after delete
                                 refreshCache();
                                 // repopulate customers table
@@ -177,9 +181,11 @@ public class CustomersController {
                                         "INFORMATION",
                                         "Customer Deletion",
                                         "Customer Deletion",
-                                        "Customer has been successfully deleted.",
+                                        "Customer " + selectedCustomer.getCustID() + " has been successfully deleted.",
                                         "ShowAndWait"
                                 );
+                                // unselect customer from table
+                                customerTableView.getSelectionModel().select(null);
                             }
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
@@ -203,7 +209,8 @@ public class CustomersController {
 
     /**
      * Sets listener for customers table. Adds validation prefix to ensure edit/delete functions aren't executed with
-     * null selections and sets selected customer to pass down to edit and delete pages.
+     * null selections and sets selected customer to pass down to edit and delete pages. Lambda used for better
+     * iteration through customers in list to perform needed actions in response to a selection.
      */
     private void setCustomerTableListener() {
         // used lambda for setting listeners on table view

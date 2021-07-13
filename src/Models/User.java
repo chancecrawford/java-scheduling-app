@@ -26,11 +26,49 @@ public class User {
     public User() {}
 
     // getters for user attributes
+    /**
+     * Gets requested user id
+     * @return user id
+     */
     public int getId() { return id; }
+
+    /**
+     * Gets requested username
+     * @return username
+     */
     public String getUsername() { return username; }
+
+    /**
+     * Gets requested user password
+     * @return user password
+     */
     public String getPassword() { return password; }
-    // setters for user attributes
+
+    // setters for user attributes (these could be useful for admin roles later on)
+    /**
+     * Sets new user id
+     * @param id
+     */
     public void setId(int id) { this.id = id; }
+
+    /**
+     * Sets new username
+     * @param username
+     */
     public void setUsername(String username) { this.username = username; }
+
+    /**
+     * Sets new user password (could be useful for a forgot password feature)
+     * @param password
+     */
     public void setPassword(String password) { this.password = password; }
+
+    /**
+     * For displaying in user choice box in add/edit appointment views
+     * @return
+     */
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
 }

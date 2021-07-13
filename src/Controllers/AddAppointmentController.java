@@ -5,6 +5,7 @@ import Main.SchedulingApplication;
 import Models.Appointment;
 import Models.Contact;
 import Models.Customer;
+import Models.User;
 import Utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,12 +20,18 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.Date;
 
+/**
+ * Controller dedicated to generating the add appointment scene, allowing input from user for new appointment, running
+ * user inputs through input validation, and saving the new appointment to the database and local cache before navigating
+ * the user back to the main apppointments view.
+ */
 public class AddAppointmentController {
     // javafx instantiation for ui elements
     @FXML private TextField titleTextField, locationTextField;
     @FXML private ChoiceBox<String> typeChoiceBox;
     @FXML private ChoiceBox<Customer> customerChoiceBox;
     @FXML private ChoiceBox<Contact> contactChoiceBox;
+    @FXML private ChoiceBox<User> userChoiceBox;
     @FXML private TextArea descriptionTextArea;
     @FXML private DatePicker apptDatePicker;
     @FXML private ComboBox<LocalTime> startComboBox, endComboBox;
@@ -34,15 +41,20 @@ public class AddAppointmentController {
     // grab cached data from main appointments view
     public static final CachedData cachedData = AppointmentsController.cachedData;
 
+    /**
+     * Initializes and populates all ui elements with needed data for user to add appointment information.
+     */
     @FXML
     private void initialize() {
         // import needed data
         cachedData.importContacts();
         cachedData.importCustomers();
+        cachedData.importUsers();
         // set data and display values
         typeChoiceBox.setItems(cachedData.getAppointmentTypes());
         customerChoiceBox.setItems(cachedData.getAllCustomers());
         contactChoiceBox.setItems(cachedData.getAllContacts());
+        userChoiceBox.setItems(cachedData.getAllUsers());
         // set date picker to todays date
         apptDatePicker.setValue(LocalDateTime.now().toLocalDate());
         disableDaysBeforeToday();
@@ -72,6 +84,7 @@ public class AddAppointmentController {
             // make sure there is a selection for these dropdowns before passing to validation func
             Integer customerID = !customerChoiceBox.getSelectionModel().isEmpty() ? customerChoiceBox.getSelectionModel().getSelectedItem().getCustID() : null;
             Integer contactID = !contactChoiceBox.getSelectionModel().isEmpty() ? contactChoiceBox.getSelectionModel().getSelectedItem().getContactID() : null;
+            Integer userID = !userChoiceBox.getSelectionModel().isEmpty() ? userChoiceBox.getSelectionModel().getSelectedItem().getId() : null;
 
             // validate user inputs and appointment checks before moving forward;
             // generate error message if any fields are invalid or if conflicts exist
@@ -82,6 +95,7 @@ public class AddAppointmentController {
                         typeChoiceBox.getSelectionModel().getSelectedItem(),
                         customerID,
                         contactID,
+                        userID,
                         locationTextField.getText(),
                         apptDatePicker.getValue(),
                         startComboBox.getSelectionModel().getSelectedItem(),
@@ -106,7 +120,7 @@ public class AddAppointmentController {
                     saveApptStatement.setTimestamp(6, Timestamp.valueOf(startUTC));
                     saveApptStatement.setTimestamp(7, Timestamp.valueOf(endUTC));
                     saveApptStatement.setInt(8, customerID);
-                    saveApptStatement.setInt(9, SchedulingApplication.getUser().getId());
+                    saveApptStatement.setInt(9, userID);
                     saveApptStatement.setInt(10, contactID);
 
                     //check if appointment saved or not
@@ -122,9 +136,16 @@ public class AddAppointmentController {
                                 startLDT,
                                 endLDT,
                                 customerID,
-                                SchedulingApplication.getUser().getId(),
+                                userID,
                                 contactID
                         ));
+                        // clear data so updated data can repopulate appointments table
+                        cachedData.clearAppointments();
+                        cachedData.clearContacts();
+                        cachedData.clearCustomers();
+                        cachedData.clearUsers();
+                        // navigate user back to main appointments view
+                        SchedulingApplication.switchScenes(Paths.appointmentsPath);
                         // generate success alert for user
                         Alerts.GenerateAlert(
                                 "INFORMATION",
@@ -135,19 +156,9 @@ public class AddAppointmentController {
                         );
                     }
                 }
-            } catch (ParseException | SQLException e) {
+            } catch (ParseException | SQLException | IOException e) {
                 e.printStackTrace();
                 Alerts.GenerateAlert("ERROR", "Appointment Save Error", "Appointment Save Error", "Appointment could not be saved!", "ShowAndWait");
-            }
-            // clear data so updated data can repopulate appointments table
-            cachedData.clearAppointments();
-            cachedData.clearContacts();
-            cachedData.clearCustomers();
-            // navigate user back to main appointments view
-            try {
-                SchedulingApplication.switchScenes(Paths.appointmentsPath);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
         cancelButton.setOnAction(actionEvent -> {
@@ -170,7 +181,8 @@ public class AddAppointmentController {
     }
 
     /**
-     * Disables days in date picker before current date as an extra layer of validation for appointments.
+     * Disables days in date picker before current date as an extra layer of validation for appointments. Uses lambda
+     * for better iteration through cells with updateItem function to disable.
      */
     private void disableDaysBeforeToday() {
         apptDatePicker.setDayCellFactory(datePicker -> new DateCell() {
@@ -183,8 +195,8 @@ public class AddAppointmentController {
     }
 
     /**
-     * Formats LocalTime cells to display as 12hr time format. Lambda is used for iterating through list cells to perform
-     * updateItem function more efficiently.
+     * Formats LocalTime cells to display as 12hr time format. Lambda is used for iterating through list cells more
+     * efficiently to perform updateItem function on each one.
      */
     private void convertTimeSelectionCells() {
         startComboBox.setCellFactory(localTimeListView -> new ListCell<>() {
@@ -215,7 +227,8 @@ public class AddAppointmentController {
         });
     }
     /**
-     * Callback to reformat combobox selection for start/end
+     * Callback to reformat combobox selection for start/end. Does NOT use lambda for iteration since only single object
+     * that we need to convert.
      */
     Callback<ListView<LocalTime>, ListCell<LocalTime>> timesCellFactory = new Callback<>() {
         @Override

@@ -35,7 +35,7 @@ public class InputValidation {
      * Checks if provided username/password is null or empty
      * @param username
      * @param password
-     * @return
+     * @return true/false depending on user inputs
      */
     public static boolean checkLoginInputs(String username, String password) {
         // use string builder for generating multiple errors
@@ -75,7 +75,7 @@ public class InputValidation {
      * @param start
      * @param end
      * @return true/false depending on inputs
-     * @throws ParseException
+     * @throws ParseException if dates or times can't be parsed
      */
     public static boolean areAppointmentInputsValid(
             int apptID,
@@ -83,6 +83,7 @@ public class InputValidation {
             String type,
             Integer customerID,
             Integer contactID,
+            Integer userID,
             String location,
             LocalDate localDate,
             LocalTime start,
@@ -103,6 +104,9 @@ public class InputValidation {
         }
         if (contactID == null) {
             inputErrors.append(Text.appointmentContactError).append("\n");
+        }
+        if (userID == null) {
+            inputErrors.append(Text.appointmentUserError).append("\n");
         }
         if (isInputNull(location)) {
             inputErrors.append(Text.appointmentLocationError).append("\n");
@@ -221,22 +225,25 @@ public class InputValidation {
     /**
      * Checks for any null/empty inputs and validates postal code and phone number are valid.
      * @param name
-     * @param address1
+     * @param address
      * @param divisionID
      * @param countryID
      * @param postalCode
      * @param phoneNum
      * @return true/false depending on input validity
      */
-    public static boolean areCustomerInputsValid(String name, String address1, Integer divisionID, Integer countryID, String postalCode, String phoneNum) {
+    public static boolean areCustomerInputsValid(String name, String address, String city, Integer divisionID, Integer countryID, String postalCode, String phoneNum) {
         // to hold multiple error messages
         StringBuilder inputErrors = new StringBuilder();
         // check for nulls/empty values
         if (isInputNull(name)) {
             inputErrors.append(Text.customerNameError).append("\n");
         }
-        if (isInputNull(address1)) {
+        if (isInputNull(address)) {
             inputErrors.append(Text.customerAddressError).append("\n");
+        }
+        if (isInputNull(city)) {
+            inputErrors.append(Text.customerCityError).append("\n");
         }
         if (divisionID == null) {
             inputErrors.append(Text.customerCityError).append("\n");
@@ -282,7 +289,7 @@ public class InputValidation {
 
     /**
      * Regex to check if phone number is entered correctly. Handles multiple formats including international formats.
-     * source for regex --> https://regexr.com/38pvb
+     * source for regex -- https://regexr.com/38pvb
      * @param phoneNum input from customer
      * @return true/false depending on match to regex
      */

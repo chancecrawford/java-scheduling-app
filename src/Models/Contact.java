@@ -25,12 +25,42 @@ public class Contact {
     public Contact () { }
 
     // getters for contact attributes
+
+    /**
+     * Gets request contact id
+     * @return contact id
+     */
     public Integer getContactID() { return contactID; }
+
+    /**
+     * Gets requested contact name
+     * @return contact name
+     */
     public String getContactName() { return contactName; }
+
+    /**
+     * Gets requested contact email
+     * @return contact email
+     */
     public String getContactEmail() { return contactEmail; }
     // setters for contact attributes
+
+    /**
+     * Sets new contact id
+     * @param id
+     */
     public void setContactID(int id ) { this.contactID = id; }
+
+    /**
+     * Sets new contact name
+     * @param name
+     */
     public void setContactName(String name) { this.contactName = name; }
+
+    /**
+     * Sets new contact email
+     * @param email
+     */
     public void setContactEmail(String email) { this.contactEmail = email; }
 
     /**

@@ -21,6 +21,11 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
+/**
+ * Main appointments view that contains navigation buttons to other important views, a list of appointments to be viewed
+ * by week or month depending on user toggle choice, and which can be selected by a user to by modified or deleted. Users
+ * can also navigate to add appointments from here.
+ */
 public class AppointmentsController {
     // javafx instantiation for ui elements
     @FXML
@@ -63,6 +68,10 @@ public class AppointmentsController {
     // for referencing in add/edit views
     public static final CachedData cachedData = new CachedData();
 
+    /**
+     * Initializes and populates appointment list, sets actions for all buttons and toggles.
+     * @throws SQLException if a query to the database can't be completed
+     */
     @FXML
     private void initialize() throws SQLException {
         // populate appointment table view
@@ -262,7 +271,12 @@ public class AppointmentsController {
             // make sure a selection exists first
             if (selectedAppointment != null) {
                 // can't use Alerts class here due to needing to verify against user response from alert
-                Alert deleteAppointmentWarning = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + selectedAppointment.getTitle() + "?", ButtonType.OK, ButtonType.CANCEL);
+                Alert deleteAppointmentWarning = new Alert(
+                        Alert.AlertType.CONFIRMATION,
+                        "Delete Appointment " + selectedAppointment.getApptID() + " of type: " + selectedAppointment.getType() + "?",
+                        ButtonType.OK,
+                        ButtonType.CANCEL
+                );
                 deleteAppointmentWarning.showAndWait();
                 // after user confirms, delete appointment
                 if (deleteAppointmentWarning.getResult() == ButtonType.OK) {
@@ -275,18 +289,19 @@ public class AppointmentsController {
                         if (deleteResult == 1) {
                             // delete appointment from local cache
                             cachedData.deleteAppointment(selectedAppointment);
-                            appointmentTableView.getSelectionModel().select(null);
                             // refresh data then repopulate table with updated data
                             refreshCache();
                             populateAppointmentsTable();
                             // throw success alert for user
                             Alerts.GenerateAlert(
                                     "INFORMATION",
-                                    "Appointment Deletion",
-                                    "Appointment Deletion",
-                                    "Appointment has been successfully deleted.",
+                                    "Appointment Cancellation",
+                                    "Appointment Cancelled",
+                                    "Appointment " + selectedAppointment.getApptID() + " of type, " + selectedAppointment.getType() + ", has been successfully cancelled.",
                                     "ShowAndWait"
                             );
+                            // set selected appt null AFTER custom message
+                            appointmentTableView.getSelectionModel().select(null);
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
@@ -309,7 +324,8 @@ public class AppointmentsController {
 
     /**
      * Sets listener for appointments table. Adds validation prefix to ensure edit/delete functions aren't executed with
-     * null selections and sets selected appointment to pass down to edit and delete pages.
+     * null selections and sets selected appointment to pass down to edit and delete pages. Lambda used for better
+     * iteration through appointments in list to perform needed actions in response to a selection.
      */
     private void setAppointmentTableListener() {
         // used lambda for setting listener on table view selections

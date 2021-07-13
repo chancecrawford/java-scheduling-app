@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Map;
 
+/**
+ * Initial reports view that also generates the report for appointment types for the chosen month and handles
+ * selection/navigation to other types of reports.
+ */
 public class ReportAppointmentTypeMonthController {
     // javafx instantiation for ui elements
     @FXML
@@ -41,6 +45,9 @@ public class ReportAppointmentTypeMonthController {
     // hash map to link relevant report data
     private final ObservableMap<String, Integer> apptTypeHashMap = FXCollections.observableHashMap();
 
+    /**
+     * Initializes all ui elements, retrieves the needed data for the report, and populates the table view with the results.
+     */
     @FXML
     private void initialize() {
         // set reports available in choicebox
@@ -139,10 +146,10 @@ public class ReportAppointmentTypeMonthController {
     }
 
     /**
-     * Changes view to selected report view after selection confirmed not to be null, based on user input
+     * Changes view to selected report view after selection confirmed not to be null, based on user input. Uses lambda
+     * for better iteration through choice box elements to perform view switching.
      */
     private void setReportChoiceListener() {
-        // lambda used for better iteration for listener through objects
         reportsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
                 try {
@@ -163,7 +170,8 @@ public class ReportAppointmentTypeMonthController {
     }
 
     /**
-     * Sets columns to relevant data from report
+     * Sets columns to relevant data from report. Uses lambda for each column to more efficiently set values from generated
+     * report.
      */
     private void setReportColumns() {
         // lambda for better iteration and setting of values in columns

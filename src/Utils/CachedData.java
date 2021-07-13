@@ -1,6 +1,5 @@
 package Utils;
 
-import Main.SchedulingApplication;
 import Models.*;
 
 import javafx.collections.FXCollections;
@@ -27,42 +26,134 @@ public class CachedData {
     private static final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     private static final ObservableList<Country> allCountries = FXCollections.observableArrayList();
     private static final ObservableList<Division> allDivisions = FXCollections.observableArrayList();
+    private static final ObservableList<User> allUsers = FXCollections.observableArrayList();
+
     // methods for adding and deleting objects/models from relevant lists
+    /**
+     * Adds appt object to list in cache
+     * @param newAppointment
+     */
     public void addAppointment(Appointment newAppointment) {
         allAppointments.add(newAppointment);
     }
+
+    /**
+     * Adds contact object to list in cache
+     * @param newContact
+     */
     public void addContact(Contact newContact) {
         allContacts.add(newContact);
     }
+
+    /**
+     * Adds customer object to list in cache
+     * @param newCustomer
+     */
     public void addCustomer(Customer newCustomer) {
         allCustomers.add(newCustomer);
     }
+
+    /**
+     * Adds division object to list in cache
+     * @param division
+     */
     public void addDivision(Division division) { allDivisions.add(division); }
+
+    /**
+     * Adds user object to list in cache
+     * @param newUser
+     */
+    public void addUser(User newUser) { allUsers.add(newUser); }
+
+    /**
+     * Deletes an appt from cache
+     * @param appointment
+     */
     public void deleteAppointment(Appointment appointment) { allAppointments.remove(appointment); }
+
+    /**
+     * Deletes customer from cache
+     * @param customer
+     */
     public void deleteCustomer(Customer customer) { allCustomers.remove(customer); }
+
     // methods for retrieving lists of specific model/object data
+    /**
+     * Returns list of all appts in cache
+     * @return appts list
+     */
     public ObservableList<Appointment> getAllAppointments() {
         return allAppointments;
     }
+
+    /**
+     * Returns list of all contacts in cache
+     * @return contacts list
+     */
     public ObservableList<Contact> getAllContacts() {
         return allContacts;
     }
+
+    /**
+     * Returns list of all customers in cache
+     * @return customers list
+     */
     public ObservableList<Customer> getAllCustomers() {
         return allCustomers;
     }
+
+    /**
+     * Returns list of all users in cache
+     * @return user list
+     */
+    public ObservableList<User> getAllUsers() { return allUsers; }
+
+    /**
+     * Returns lists of all countries in cache
+     * @return country list
+     */
     public ObservableList<Country> getAllCountries() { return allCountries; }
 
     // methods for clearing specific datasets or entire cache
+    /**
+     * Clears appts list in cache
+     */
     public void clearAppointments() { allAppointments.clear(); }
+    /**
+     * Clears contacts list in cache
+     */
     public void clearContacts() {
         allContacts.clear();
     }
+    /**
+     * Clears customers list in cache
+     */
     public void clearCustomers() {
         allCustomers.clear();
     }
+    /**
+     * Clears user list in cache
+     */
+    public void clearUsers() { allUsers.clear(); }
+    /**
+     * Clears country list in cache
+     */
     public void clearCountries() { allCountries.clear(); }
+    /**
+     * Clears divisions list in cache
+     */
     public void clearDivisions() { allDivisions.clear(); }
-    public void clearCache() { allAppointments.clear(); allContacts.clear(); allCustomers.clear(); allCountries.clear(); allDivisions.clear(); }
+    /**
+     * Clears all data populated from the database in the cache
+     */
+    public void clearCache() {
+        allAppointments.clear();
+        allContacts.clear();
+        allCustomers.clear();
+        allUsers.clear();
+        allCountries.clear();
+        allDivisions.clear();
+    }
 
     /**
      * Grabs all appointments from database and populates cache with it
@@ -169,6 +260,26 @@ public class CachedData {
         }
     }
 
+    public void importUsers() {
+        try {
+            // create query for all users
+            PreparedStatement usersStatement = Database.getDBConnection().prepareStatement("SELECT * FROM users");
+            ResultSet usersResult = usersStatement.executeQuery();
+            while (usersResult.next()) {
+                // create user object
+                User user = new User (
+                        usersResult.getInt("User_ID"),
+                        usersResult.getString("User_Name"),
+                        usersResult.getString("Password")
+                );
+                // add user to cache
+                addUser(user);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     /**
      * Grabs appointments that match current user to date passed to it
      * @param date desired date to get appointments for
@@ -179,8 +290,7 @@ public class CachedData {
         ObservableList<Appointment> datesMatched = FXCollections.observableArrayList();
         // iterate through all appointments for comparison to date requested
         for (Appointment appointment : getAllAppointments()) {
-            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
-                    && DateFormatter.formatLocalDateTime(appointment.getStart(), "iso").equals(date)) {
+            if (DateFormatter.formatLocalDateTime(appointment.getStart(), "iso").equals(date)) {
                 // if dates match, add to temp list
                 datesMatched.add(appointment);
             }
@@ -240,8 +350,7 @@ public class CachedData {
         ObservableList<Appointment> monthMatches = FXCollections.observableArrayList();
         // iterate through all appointments
         for (Appointment appointment : getAllAppointments()) {
-            if (appointment.getUserID() == SchedulingApplication.getUser().getId()
-                    && appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
+            if (appointment.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM")).equals(date)) {
                 // if appointment is in that month, add to temp list
                 monthMatches.add(appointment);
             }
@@ -363,6 +472,20 @@ public class CachedData {
     }
 
     /**
+     * Gets user object by id from cache
+     * @param id requested id
+     * @return user object containing that id or null if one not found
+     */
+    public User getUserByID(int id) {
+        for (User user:allUsers) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Gets division object by id from cache
      * @param id requested id
      * @return division object containing that id or null if one not found
@@ -428,7 +551,7 @@ public class CachedData {
     }
 
 
-    // just for easier setting of label
+    // just for easier setting of business hours label
     public final String businessOpen = "8:00 AM";
     public final String businessClose = "10:00 PM";
 
